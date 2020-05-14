@@ -127,7 +127,7 @@ wat_clean_data <- function(somedata,
       data.table::setnames(somedata,
                            old = c("x.med", "y.med", "TAG", "TIME", "sld", "sld_speed"),
                            new = c("x", "y", "id", "time", "dist", "speed"))
-    }
+
 
   }else{
     somedata <- data.table::data.table(matrix(NA, nrow = 0, ncol = 16))
