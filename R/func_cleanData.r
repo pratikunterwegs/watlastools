@@ -13,7 +13,7 @@
 wat_clean_data <- function(somedata,
                            moving_window=3,
                            nbs_min=0,
-                           sd_threshold=500000,
+                           sd_threshold=2000,
                            filter_speed=TRUE,
                            speed_cutoff = 150){
 
@@ -25,6 +25,10 @@ wat_clean_data <- function(somedata,
   {
     assertthat::assert_that("data.frame" %in% class(somedata),
                             msg = "cleanData: not a dataframe object!")
+
+    # ensure dataframe only contains one individual, otherwise wrapper function should be used.
+    assertthat::assert_that(length(unique(TAG)) > 1,
+                            msg = "cleanData: cannot be used in dataframes with multiple individuals!")
 
     # include asserts checking for required columns
     {
@@ -93,8 +97,6 @@ wat_clean_data <- function(somedata,
     # rename x,y,time to lower case
     setnames(somedata, old = c("X","Y","TAG","TIME"),
              new = c("x","y","id","time"))
-
-    somedata <- somedata
 
   }else{
 
