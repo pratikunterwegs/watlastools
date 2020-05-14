@@ -1,6 +1,6 @@
 #' Get data from the NIOZ servers. Untested, unlikely to work off the NIOZ network.
 #'
-#' @param tag A three digit numeric representing the ToA tag.
+#' @param tag A three digit numeric representing the ToA tag or a vector of multiple 3 digit tags.
 #' @param tracking_time_start Character representation of time (Central European Time, +1 UTC) from which start point data should be retrieved.
 #' @param tracking_time_end Character time representing the end point corresponding to the above start point.
 #' @param database The database name on the host server. Defaults to \code{db} for unknown reasons.
@@ -55,8 +55,7 @@ wat_get_data <- function(tag,
   {
     mydb = RMySQL::dbConnect(RMySQL::MySQL(), user=username, password=password, dbname=database, host=host)
   }
-
-  # SQL code to retrive data
+  # SQL code to retrieve data
   {
     sql_query <- glue::glue("select TAG, TIME, X, Y, NBS, VARX, VARY, COVXY
     FROM LOCALIZATIONS
