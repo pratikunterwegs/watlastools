@@ -49,7 +49,7 @@ wat_clean_data <- function(somedata,
   # convert to data.table
   {
     # convert both to DT if not
-    if (is.data.table(somedata) != TRUE) {
+    if (data.table::is.data.table(somedata) != TRUE) {
       setDT(somedata)
     }
   }
