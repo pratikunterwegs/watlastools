@@ -27,7 +27,7 @@ wat_clean_data <- function(somedata,
                             msg = "cleanData: not a dataframe object!")
 
     # ensure dataframe only contains one individual, otherwise wrapper function should be used.
-    assertthat::assert_that(length(unique(TAG)) > 1,
+    assertthat::assert_that(length(unique(somedata$TAG)) == 1,
                             msg = "cleanData: cannot be used in dataframes with multiple individuals!")
 
     # include asserts checking for required columns
