@@ -32,4 +32,4 @@ wat_clean_wrap <- function(somedata, ...){
 
 }
 
-dat <- wat_clean_wrap(somedata=prelim_data1, sd_threshold = 100)
+# ends here
