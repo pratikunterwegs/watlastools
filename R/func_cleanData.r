@@ -21,6 +21,7 @@ wat_clean_data <- function(somedata,
                            filter_speed = TRUE,
                            speed_cutoff = 150)
 {
+  somedata <-prelim_data
   SD <- NBS <- TIME <- TAG <- X <- Y <- NULL #sets vectors to NULL
   posID <- ts <- X_raw <- Y_raw <- VARX <- VARY <- COVXY <- NULL
   sld <- sld_speed <- NULL
@@ -50,7 +51,7 @@ wat_clean_data <- function(somedata,
   {
     # convert both to DT if not
     if (data.table::is.data.table(somedata) != TRUE) {
-      setDT(somedata)
+      data.table::setDT(somedata)
     }
   }
   # delete positions with approximated standard deviations above SD_threshold,
@@ -77,26 +78,26 @@ wat_clean_data <- function(somedata,
 
     if(filter_speed == TRUE){
       # filter for insane speeds if asked
-      somedata[, `:=`(sld, wat_simple_dist(somedata, "X", "Y"))] #calculate distance
-      somedata[, `:=`(tdiff, TIME - shift(TIME))]######### get time difs between rows to calculate groups later.
+      somedata[, `:=`(sld, watlastools::wat_simple_dist(somedata, "X", "Y"))] #calculate distance
+      somedata[, `:=`(tdiff, TIME - data.table::shift(TIME))]######### get time difs between rows to calculate groups later.
       somedata[, `:=`(sld_speed, sld/c(NA, as.numeric(diff(TIME))))] #calculate speed
 
       while(nrow(somedata[sld_speed > (speed_cutoff/3.6),])>0){ #While there are any points that are over the speed cut off limit, remove them, recalculate speeds without these points. The next parts may also remove points and therefore speeds should be checked before moving forward.
 
         somedata <- somedata[sld_speed <= (speed_cutoff/3.6), ] #remove speeds over the cut off then recalculate
-        somedata[, `:=`(sld, wat_simple_dist(somedata, "X", "Y"))] # recalculate distance
+        somedata[, `:=`(sld, watlastools::wat_simple_dist(somedata, "X", "Y"))] # recalculate distance
         somedata[, `:=`(sld_speed, sld/c(NA, as.numeric(diff(TIME))))] # recalculate speed
         somedata[, `:=`(ts, as.POSIXct(TIME, tz = "CET", origin = "1970-01-01"))] #create a human-readable timestamp column
 
         #ensure each time group is within max_tDiff of each other (e.g. 3 rows should be 9 seconds)
-        somedata[, `:=`(tdiff, TIME - shift(TIME, fill= first(TIME)))]# get time difs between rows to calculate groups later.
+        somedata[, `:=`(tdiff, TIME - data.table::shift(TIME, fill= first(TIME)))]# get time difs between rows to calculate groups later.
         somedata[, `:=`(tdOver, as.integer(tdiff > max_tDiff))] # find values that are > maximum difference value
         somedata[, `:=`(tGroup, cumsum(tdOver) + 1)] #create groups
         somedata[, `:=`(n, .N), by = tGroup]# how many points are in each section, can't really make a median with very few points
 
         somedata[n >= 3] # remove sections with few points before median is calculated then retest speed filters just in case
 
-        somedata[, `:=`(sld, wat_simple_dist(somedata, "X", "Y"))] # recalculate distance
+        somedata[, `:=`(sld, watlastools::wat_simple_dist(somedata, "X", "Y"))] # recalculate distance
         somedata[, `:=`(sld_speed, sld/c(NA, as.numeric(diff(TIME))))] # recalculate speed
 
       }
