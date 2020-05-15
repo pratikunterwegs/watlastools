@@ -22,8 +22,7 @@ wat_clean_data <- function(somedata,
                            filter_speed = TRUE,
                            speed_cutoff = 150)
 {
-  data <- data.table::data.table(matrix(NA, nrow = 0, ncol = 16))
-  somedata <- prelim_data
+
   SD <- NBS <- TIME <- TAG <- X <- Y <- NULL #sets vectors to NULL
   posID <- ts <- X_raw <- Y_raw <- VARX <- VARY <- COVXY <- NULL
   sld <- sld_speed <- NULL
@@ -32,15 +31,21 @@ wat_clean_data <- function(somedata,
   {
     assertthat::assert_that("data.frame" %in% class(somedata),
                             msg = "cleanData: not a dataframe object!") #assert that is like an if statement but breaks function if not met
+
+    # ensure dataframe only contains one individual, otherwise wrapper function should be used.
+    assertthat::assert_that(length(unique(somedata$TAG)) == 1,
+                            msg = "cleanData: cannot be used in dataframes with multiple individuals!")
+    # include asserts checking for required columns
     {
       dfnames <- colnames(somedata)
       namesReq <- c("X", "Y", "SD", "NBS", "TAG", "TIME", "VARX", "VARY", "COVXY")
-      # include asserts checking for required columns
+
       purrr::walk(namesReq, function(nr) {
         assertthat::assert_that(nr %in% dfnames,
                                 msg = glue::glue("cleanData: {nr} is required but missing from data!"))
       })
     }
+
     # check args positive
     assertthat::assert_that(min(c(moving_window)) > 1,
                             msg = "cleanData: moving window not > 1") #alerts user to errors in function parameters
@@ -51,12 +56,13 @@ wat_clean_data <- function(somedata,
   }
   # convert to data.table
   {
-    # convert both to DT if not
+  # convert both to DT if not
   data.table::as.data.table(somedata)
   }
   # delete positions with approximated standard deviations above SD_threshold,
   # and below minimum number of base stations (NBS_min), VARX and VARY values
   # Ensure that badly estimated locations are removed.
+
   somedata <- somedata[SD < sd_threshold &
                          NBS >= nbs_min &
                          VARX < var_lim &
@@ -71,69 +77,59 @@ wat_clean_data <- function(somedata,
     #somedata[,.SD[order(TIME)], by = id] # not tested this but its probably a good checker.
     # add position id and change time to seconds
 
-    # Do filtering for individuals separately
-    tags <- unique(somedata$TAG)
-    tagData <- NULL #list of different tag dataframes to rbind at the end
+      somedata[, `:=`(posID = 1:nrow(somedata),#can use this to determine original position of point, useful for debugging
+                      TIME = as.numeric(TIME)/1e3, #time from atlas is given in milliseconds from 1970, change to seconds.
+                      TAG = as.numeric(TAG) - prefix_num, # remove prefix from tag column
+                      X_raw = X, #create columns for original x and y values
+                      Y_raw = Y)]
 
-    for(i in tags){
-        sub <- somedata
-        somedata[, `:=`(posID = 1:nrow(somedata),#can use this to determine original position of point, useful for debugging
-                        TIME = as.numeric(TIME)/1e3, #time from atlas is given in milliseconds from 1970, change to seconds.
-                        TAG = as.numeric(TAG) - prefix_num, # remove prefix from tag column
-                        X_raw = X, #create columns for original x and y values
-                        Y_raw = Y)]
+      if(filter_speed == TRUE){
+        # filter for insane speeds if asked
+        somedata[, `:=`(sld, watlastools::wat_simple_dist(somedata, "X", "Y"))] #calculate distance
+        somedata[, `:=`(tdiff, TIME - data.table::shift(TIME))]######### get time difs between rows to calculate groups later.
+        somedata[, `:=`(sld_speed, sld/c(NA, as.numeric(diff(TIME))))] #calculate speed
 
-        if(filter_speed == TRUE){
-          # filter for insane speeds if asked
-          somedata[, `:=`(sld, watlastools::wat_simple_dist(somedata, "X", "Y"))] #calculate distance
-          somedata[, `:=`(tdiff, TIME - data.table::shift(TIME))]######### get time difs between rows to calculate groups later.
-          somedata[, `:=`(sld_speed, sld/c(NA, as.numeric(diff(TIME))))] #calculate speed
+        while(nrow(somedata[sld_speed > (speed_cutoff/3.6),])>0){ #While there are any points that are over the speed cut off limit, remove them, recalculate speeds without these points. The next parts may also remove points and therefore speeds should be checked before moving forward.
 
-          while(nrow(somedata[sld_speed > (speed_cutoff/3.6),])>0){ #While there are any points that are over the speed cut off limit, remove them, recalculate speeds without these points. The next parts may also remove points and therefore speeds should be checked before moving forward.
+          somedata <- somedata[sld_speed <= (speed_cutoff/3.6), ] #remove speeds over the cut off then recalculate
+          somedata[, `:=`(sld, watlastools::wat_simple_dist(somedata, "X", "Y"))] # recalculate distance
+          somedata[, `:=`(sld_speed, sld/c(NA, as.numeric(diff(TIME))))] # recalculate speed
+          somedata[, `:=`(ts, as.POSIXct(TIME, tz = "CET", origin = "1970-01-01"))] #create a human-readable timestamp column
 
-            somedata <- somedata[sld_speed <= (speed_cutoff/3.6), ] #remove speeds over the cut off then recalculate
-            somedata[, `:=`(sld, watlastools::wat_simple_dist(somedata, "X", "Y"))] # recalculate distance
-            somedata[, `:=`(sld_speed, sld/c(NA, as.numeric(diff(TIME))))] # recalculate speed
-            somedata[, `:=`(ts, as.POSIXct(TIME, tz = "CET", origin = "1970-01-01"))] #create a human-readable timestamp column
+          #ensure each time group is within max_tDiff of each other (e.g. 3 rows should be 9 seconds)
+          somedata[, `:=`(tdiff, TIME - data.table::shift(TIME, fill= data.table::first(TIME)))]# get time difs between rows to calculate groups later.
+          somedata[, `:=`(tdOver, as.integer(tdiff > max_tDiff))] # find values that are > maximum difference value
+          somedata[, `:=`(tGroup, cumsum(tdOver) + 1)] #create groups
+          somedata[, `:=`(n, .N), by = tGroup]# how many points are in each section, can't really make a median with very few points
 
-            #ensure each time group is within max_tDiff of each other (e.g. 3 rows should be 9 seconds)
-            somedata[, `:=`(tdiff, TIME - data.table::shift(TIME, fill= data.table::first(TIME)))]# get time difs between rows to calculate groups later.
-            somedata[, `:=`(tdOver, as.integer(tdiff > max_tDiff))] # find values that are > maximum difference value
-            somedata[, `:=`(tGroup, cumsum(tdOver) + 1)] #create groups
-            somedata[, `:=`(n, .N), by = tGroup]# how many points are in each section, can't really make a median with very few points
+          somedata[n >= 3] # remove sections with few points before median is calculated then retest speed filters just in case
 
-            somedata[n >= 3] # remove sections with few points before median is calculated then retest speed filters just in case
+          somedata[, `:=`(sld, watlastools::wat_simple_dist(somedata, "X", "Y"))] # recalculate distance
+          somedata[, `:=`(sld_speed, sld/c(NA, as.numeric(diff(TIME))))] # recalculate speed
 
-            somedata[, `:=`(sld, watlastools::wat_simple_dist(somedata, "X", "Y"))] # recalculate distance
-            somedata[, `:=`(sld_speed, sld/c(NA, as.numeric(diff(TIME))))] # recalculate speed
-
-          }
         }
+      }
 
-        # median filter
-        # no longer includes reversed smoothing. Phase shifts should no longer occur due to grouping by minimum time differences.
+      # median filter
+      # no longer includes reversed smoothing. Phase shifts should no longer occur due to grouping by minimum time differences.
 
-        somedata[, `:=`(x.med,
-                        lapply(.SD, function(z) {stats::runmed(z, moving_window)})),
-                 .SDcols = "X", by = tGroup]
+      somedata[, `:=`(x.med,
+                      lapply(.SD, function(z) {stats::runmed(z, moving_window)})),
+               .SDcols = "X", by = tGroup]
 
-        somedata[, `:=`(y.med,
-                        lapply(.SD, function(z) {stats::runmed(z, moving_window)})),
-                 .SDcols = "Y", by = tGroup]
+      somedata[, `:=`(y.med,
+                      lapply(.SD, function(z) {stats::runmed(z, moving_window)})),
+               .SDcols = "Y", by = tGroup]
 
-        ## postprocess (clean) data
-        somedata <- somedata[, .(TAG, posID, TIME, ts, X_raw, Y_raw, NBS, VARX, VARY, COVXY, x.med, y.med, SD, sld, sld_speed,n)]
+      ## postprocess (clean) data
+      somedata <- somedata[, .(TAG, posID, TIME, ts, X_raw, Y_raw, NBS, VARX, VARY, COVXY, x.med, y.med, SD, sld, sld_speed,n)]
 
-        # rename columns to appropriate final names
-        data.table::setnames(somedata,
-                 old = c("x.med", "y.med", "TAG", "TIME", "sld", "sld_speed"),
-                 new = c("x", "y", "id", "time", "dist", "speed"))
-        data.table::rbindlist(allData, somedata)
+      # rename columns to appropriate final names
+      data.table::setnames(somedata,
+                           old = c("x.med", "y.med", "TAG", "TIME", "sld", "sld_speed"),
+                           new = c("x", "y", "id", "time", "dist", "speed"))
 
-        assign(glue::glue("d{i}"), somedata)
-        tagData <- list(tagData, glue::glue_collapse("d{i}", " + "))
-    }
-    allData <- data.table::rbindlist(tagData)
+
   }else{
     somedata <- data.table::data.table(matrix(NA, nrow = 0, ncol = 16))
     colnames(somedata) <- c("id", "posID", "time", "ts",
