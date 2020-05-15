@@ -56,9 +56,10 @@ wat_clean_data <- function(somedata,
   }
   # convert to data.table
   {
-  # convert both to DT if not
-  data.table::as.data.table(somedata)
+    # convert both to DT if not
+    if(data.table::is.data.table(somedata) != TRUE) {data.table::setDT(somedata)}
   }
+
   # delete positions with approximated standard deviations above SD_threshold,
   # and below minimum number of base stations (NBS_min), VARX and VARY values
   # Ensure that badly estimated locations are removed.
@@ -73,7 +74,7 @@ wat_clean_data <- function(somedata,
   prefix_num <- 31001000000
 
   # begin processing if there is data
-  if (nrow(somedata) > 1) { # Shouldn't this be >= 1?
+  if (nrow(somedata) > 1) { #
     #somedata[,.SD[order(TIME)], by = id] # not tested this but its probably a good checker.
     # add position id and change time to seconds
 
@@ -89,6 +90,27 @@ wat_clean_data <- function(somedata,
         somedata[, `:=`(tdiff, TIME - data.table::shift(TIME))]######### get time difs between rows to calculate groups later.
         somedata[, `:=`(sld_speed, sld/c(NA, as.numeric(diff(TIME))))] #calculate speed
 
+        #need to apply other filters even if speed filter is fine.
+        if(nrow(somedata[sld_speed > (speed_cutoff/3.6),]) == 0){
+
+          somedata[, `:=`(ts, as.POSIXct(TIME, tz = "CET", origin = "1970-01-01"))] #create a human-readable timestamp column
+
+          #ensure each time group is within max_tDiff of each other (e.g. 3 rows should be 9 seconds)
+          somedata[, `:=`(tdiff, TIME - data.table::shift(TIME, fill= data.table::first(TIME)))]# get time difs between rows to calculate groups later.
+          somedata[, `:=`(tdOver, as.integer(tdiff > max_tDiff))] # find values that are > maximum difference value
+
+          somedata[, `:=`(tGroup, cumsum(tdOver) + 1)] #create groups
+          somedata[, `:=`(n, .N), by = tGroup]# how many points are in each section, can't really make a median with very few points
+
+          somedata <- somedata[n >= 3,] # remove sections with few points before median is calculated then retest speed filters just in case
+
+          somedata[, `:=`(sld, watlastools::wat_simple_dist(somedata, "X", "Y"))] # recalculate distance
+          somedata[, `:=`(sld_speed, sld/c(NA, as.numeric(diff(TIME))))] # recalculate speed
+
+        }
+
+
+
         while(nrow(somedata[sld_speed > (speed_cutoff/3.6),])>0){ #While there are any points that are over the speed cut off limit, remove them, recalculate speeds without these points. The next parts may also remove points and therefore speeds should be checked before moving forward.
 
           somedata <- somedata[sld_speed <= (speed_cutoff/3.6), ] #remove speeds over the cut off then recalculate
@@ -99,10 +121,11 @@ wat_clean_data <- function(somedata,
           #ensure each time group is within max_tDiff of each other (e.g. 3 rows should be 9 seconds)
           somedata[, `:=`(tdiff, TIME - data.table::shift(TIME, fill= data.table::first(TIME)))]# get time difs between rows to calculate groups later.
           somedata[, `:=`(tdOver, as.integer(tdiff > max_tDiff))] # find values that are > maximum difference value
+
           somedata[, `:=`(tGroup, cumsum(tdOver) + 1)] #create groups
           somedata[, `:=`(n, .N), by = tGroup]# how many points are in each section, can't really make a median with very few points
 
-          somedata[n >= 3] # remove sections with few points before median is calculated then retest speed filters just in case
+          somedata <- somedata[n >= 3,] # remove sections with few points before median is calculated then retest speed filters just in case
 
           somedata[, `:=`(sld, watlastools::wat_simple_dist(somedata, "X", "Y"))] # recalculate distance
           somedata[, `:=`(sld_speed, sld/c(NA, as.numeric(diff(TIME))))] # recalculate speed
