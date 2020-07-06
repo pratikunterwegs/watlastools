@@ -127,24 +127,27 @@ time of each position since high tide.</h1>
 time of each position since high tide.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>wat_add_tide</span>(<span class='no'>df</span>, <span class='no'>tide_data</span>)</pre>
+    <pre class="usage"><span class='fu'>wat_add_tide</span>(<span class='no'>data</span>, <span class='no'>tide_data</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>df</th>
-      <td><p>A data frame which is the output of the clean data function <code>wat_clean_data</code>.</p></td>
+      <th>data</th>
+      <td><p>A data frame which is the output of the clean data function
+<code>wat_clean_data</code>.</p></td>
     </tr>
     <tr>
       <th>tide_data</th>
-      <td><p>A data frame of high tide times which has the following columns: 1. time (as a posixct object), 2. waterlevel, 3. tide_number.</p></td>
+      <td><p>A data frame of high tide times which has the following
+columns: 1. time (as a posixct object), 2. waterlevel, 3. tide_number.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A datatable class object (extends data.frame) which has the additional columns tide_number and time (in mins) since high tide.</p>
+    <p>A datatable class object (extends data.frame) which has the
+additional columns tide_number and time (in mins) since high tide.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

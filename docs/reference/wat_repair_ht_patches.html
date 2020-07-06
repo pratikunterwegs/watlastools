@@ -124,9 +124,9 @@
 
     <pre class="usage"><span class='fu'>wat_repair_ht_patches</span>(
   <span class='no'>patch_data_list</span>,
-  <span class='kw'>spatIndepLim</span> <span class='kw'>=</span> <span class='fl'>100</span>,
-  <span class='kw'>tempIndepLim</span> <span class='kw'>=</span> <span class='fl'>30</span>,
-  <span class='kw'>bufferSize</span> <span class='kw'>=</span> <span class='fl'>10</span>
+  <span class='kw'>lim_spat_indep</span> <span class='kw'>=</span> <span class='fl'>100</span>,
+  <span class='kw'>lim_time_indep</span> <span class='kw'>=</span> <span class='fl'>30</span>,
+  <span class='kw'>buffer_radius</span> <span class='kw'>=</span> <span class='fl'>10</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -137,15 +137,15 @@
       <td><p>A list of data.tables, each the output of make_res_patch. Must have an sfc geometry column.</p></td>
     </tr>
     <tr>
-      <th>spatIndepLim</th>
+      <th>lim_spat_indep</th>
       <td><p>The spatial independence limit.</p></td>
     </tr>
     <tr>
-      <th>tempIndepLim</th>
+      <th>lim_time_indep</th>
       <td><p>The temporal independence limit.</p></td>
     </tr>
     <tr>
-      <th>bufferSize</th>
+      <th>buffer_radius</th>
       <td><p>The buffer size for spatial polygons.</p></td>
     </tr>
     </table>

@@ -122,24 +122,33 @@
     <p>Classify points as residence points based on residence time.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>wat_classify_points</span>(<span class='no'>somedata</span>, <span class='kw'>resTimeLimit</span> <span class='kw'>=</span> <span class='fl'>2</span>)</pre>
+    <pre class="usage"><span class='fu'>wat_classify_points</span>(<span class='no'>data</span>, <span class='kw'>lim_res_time</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>min_fix_warning</span> <span class='kw'>=</span> <span class='fl'>5</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>somedata</th>
-      <td><p>A data frame which must have a column for the residence time at each point.</p></td>
+      <th>data</th>
+      <td><p>A data frame which must have a column for the
+residence time at each point.</p></td>
     </tr>
     <tr>
-      <th>resTimeLimit</th>
-      <td><p>A numeric giving the time limit in minutes against which residence time is compared.</p></td>
+      <th>lim_res_time</th>
+      <td><p>A numeric giving the time limit in minutes
+against which residence time is compared.</p></td>
+    </tr>
+    <tr>
+      <th>min_fix_warning</th>
+      <td><p>Triggers a warning if the data with travel segments
+removed has fewer than this number of rows.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data.frame extension object, which retains only points classified as residence points if residence time is below <code>resTimeLimit</code> over <code>travelSeg</code> points.</p>
+    <p>A data.frame extension object, which retains only points
+classified as residence points if residence time is below <code>lim_res_time</code>
+ over <code>travelSeg</code> points.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

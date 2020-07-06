@@ -123,7 +123,7 @@
     </div>
 
     <pre class="usage"><span class='fu'>wat_bw_patch_dist</span>(
-  <span class='no'>df</span>,
+  <span class='no'>data</span>,
   <span class='kw'>x1</span> <span class='kw'>=</span> <span class='st'>"x_end"</span>,
   <span class='kw'>x2</span> <span class='kw'>=</span> <span class='st'>"x_start"</span>,
   <span class='kw'>y1</span> <span class='kw'>=</span> <span class='st'>"y_end"</span>,
@@ -134,30 +134,40 @@
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>df</th>
-      <td><p>A dataframe of or extending the class data.frame. This must contain two pairs of coordinates, the start and end X and Y coordinates of a feature.</p></td>
+      <th>data</th>
+      <td><p>A dataframe of or extending the class data.frame.
+This must contain two pairs of coordinates, the start and end X and Y
+coordinates of a feature.</p></td>
     </tr>
     <tr>
       <th>x1</th>
-      <td><p>The first X coordinate or longitude; for inter-patch distances, this is the last coordinate (X_end) of a patch n0.</p></td>
+      <td><p>The first X coordinate or longitude; for inter-patch distances,
+this is the last coordinate (X_end) of a patch n0.</p></td>
     </tr>
     <tr>
       <th>x2</th>
-      <td><p>The second X coordinate; for inter-patch distances, this is the first coordinate (X_start) of a subsequent patch n1.</p></td>
+      <td><p>The second X coordinate; for inter-patch distances, this is the
+first coordinate (X_start) of a subsequent patch n1.</p></td>
     </tr>
     <tr>
       <th>y1</th>
-      <td><p>The first Y coordinate or latitude; for inter-patch distances, this is the last coordinate (Y_end) of a patch n0.</p></td>
+      <td><p>The first Y coordinate or latitude; for inter-patch distances,
+this is the last coordinate (Y_end) of a patch n0.</p></td>
     </tr>
     <tr>
       <th>y2</th>
-      <td><p>The second Y coordinate; for inter-patch distances, this is the first coordinate (Y_start) of a subsequent patch n1.</p></td>
+      <td><p>The second Y coordinate; for inter-patch distances, this is the
+first coordinate (Y_start) of a subsequent patch n1.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A numeric vector of the length of the number of patches, or rows in the input dataframe. If the input dataframe has only a single row, the vector has a length of one, and its only element is 0. In all other cases, the vector has as its elements <code>NA</code>, followed by n-1 distances, where n is the number of rows.</p>
+    <p>A numeric vector of the length of the number of patches, or rows in
+the input dataframe. If the input dataframe has only a single row, the
+vector has a length of one, and its only element is 0. In all other cases,
+the vector has as its elements <code>NA</code>, followed by n-1 distances, where
+n is the number of rows.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

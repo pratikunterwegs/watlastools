@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get data from the NIOZ servers. Untested, unlikely to work off the NIOZ network. — wat_get_data • watlastools</title>
+<title>Get data from a remote ATLAS SQL database. — wat_get_data • watlastools</title>
 
 
 <!-- jquery -->
@@ -41,8 +41,8 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Get data from the NIOZ servers. Untested, unlikely to work off the NIOZ network. — wat_get_data" />
-<meta property="og:description" content="Get data from the NIOZ servers. Untested, unlikely to work off the NIOZ network." />
+<meta property="og:title" content="Get data from a remote ATLAS SQL database. — wat_get_data" />
+<meta property="og:description" content="Get data from a remote ATLAS SQL database." />
 
 
 
@@ -113,13 +113,13 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get data from the NIOZ servers. Untested, unlikely to work off the NIOZ network.</h1>
+    <h1>Get data from a remote ATLAS SQL database.</h1>
     <small class="dont-index">Source: <a href='https://github.com/pratikunterwegs/watlastools/blob/master/R/func_getData.r'><code>R/func_getData.r</code></a></small>
     <div class="hidden name"><code>wat_get_data.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get data from the NIOZ servers. Untested, unlikely to work off the NIOZ network.</p>
+    <p>Get data from a remote ATLAS SQL database.</p>
     </div>
 
     <pre class="usage"><span class='fu'>wat_get_data</span>(
@@ -142,23 +142,29 @@
     </tr>
     <tr>
       <th>tracking_time_start</th>
-      <td><p>Character representation of time (Central European Time, +1 UTC) from which start point data should be retrieved.</p></td>
+      <td><p>Character representation of time
+(Central European Time, +1 UTC) from which start point data
+should be retrieved.</p></td>
     </tr>
     <tr>
       <th>tracking_time_end</th>
-      <td><p>Character time representing the end point corresponding to the above start point.</p></td>
+      <td><p>Character time representing the end point
+corresponding to the above start point.</p></td>
     </tr>
     <tr>
       <th>tag_prefix</th>
-      <td><p>A numeric specifying the tag prefix. Defaults to <code>31001000</code></p></td>
+      <td><p>A numeric specifying the tag prefix.
+Defaults to <code>31001000</code></p></td>
     </tr>
     <tr>
       <th>database</th>
-      <td><p>The database name on the host server. Defaults to <code>db</code> for unknown reasons.</p></td>
+      <td><p>The database name on the host server. Defaults to
+<code>db</code> for unknown reasons.</p></td>
     </tr>
     <tr>
       <th>host</th>
-      <td><p>The server address on which the data are stored. Defaults to <code>abtdb1.nioz.nl</code>.</p></td>
+      <td><p>The server address on which the data are stored.
+Defaults to <code>abtdb1.nioz.nl</code>.</p></td>
     </tr>
     <tr>
       <th>username</th>
@@ -166,13 +172,15 @@
     </tr>
     <tr>
       <th>password</th>
-      <td><p>Password to access the data. Contact <code>allert.bijleveld@nioz.nl</code> to get access.</p></td>
+      <td><p>Password to access the data.
+Contact <code>allert.bijleveld@nioz.nl</code> to get access.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A dataframe of agent positions, filtered between the required tracking times.</p>
+    <p>A dataframe of agent positions, filtered between the
+required tracking times.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

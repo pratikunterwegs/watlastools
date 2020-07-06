@@ -122,28 +122,36 @@
     <p>Infer residence patches from gaps in the canonical data.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>wat_infer_residence</span>(<span class='no'>df</span>, <span class='kw'>infPatchTimeDiff</span> <span class='kw'>=</span> <span class='fl'>30</span>, <span class='kw'>infPatchSpatDiff</span> <span class='kw'>=</span> <span class='fl'>100</span>)</pre>
+    <pre class="usage"><span class='fu'>wat_infer_residence</span>(<span class='no'>data</span>, <span class='kw'>inf_patch_time_diff</span> <span class='kw'>=</span> <span class='fl'>30</span>, <span class='kw'>inf_patch_spat_diff</span> <span class='kw'>=</span> <span class='fl'>100</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>df</th>
-      <td><p>A dataframe of recurse analysis, or must include, in addition to x, y and time columns, a residence time column named resTime, id, and tide_number, a tidaltime column named tidaltime.</p></td>
+      <th>data</th>
+      <td><p>A dataframe of recurse analysis, or must include, in addition
+to x, y and time columns, a residence time column named resTime, id, and
+tide_number, a tidaltime column named tidaltime.</p></td>
     </tr>
     <tr>
-      <th>infPatchTimeDiff</th>
-      <td><p>A numeric duration in minutes, of the minimum time difference between two points, above which, it is assumed worthwhile to examine whether there is a missing residence patch to be inferred.</p></td>
+      <th>inf_patch_time_diff</th>
+      <td><p>A numeric duration in minutes, of the minimum
+time difference between two points, above which, it is assumed worthwhile to
+examine whether there is a missing residence patch to be inferred.</p></td>
     </tr>
     <tr>
-      <th>infPatchSpatDiff</th>
-      <td><p>A numeric distance in metres, of the maximum spatial distance between two points, below which it may be assumed few extreme movements took place between them.</p></td>
+      <th>inf_patch_spat_diff</th>
+      <td><p>A numeric distance in metres, of the maximum
+spatial distance between two points, below which it may be assumed few
+extreme movements took place between them.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data.frame extension object. This dataframe has additional inferred points, indicated by the additional column for empirical fixes ('real') or 'inferred'.</p>
+    <p>A data.frame extension object. This dataframe has additional inferred
+ points, indicated by the additional column for empirical fixes ('real')
+ or 'inferred'.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

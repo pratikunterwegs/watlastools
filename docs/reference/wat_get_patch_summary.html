@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get derived data from residence patch construction: patch summaries, sf-based patches, or raw points with patch numbers. — wat_get_patch_summary • watlastools</title>
+<title>Get derived data from residence patch construction. — wat_get_patch_summary • watlastools</title>
 
 
 <!-- jquery -->
@@ -41,8 +41,8 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Get derived data from residence patch construction: patch summaries, sf-based patches, or raw points with patch numbers. — wat_get_patch_summary" />
-<meta property="og:description" content="Get derived data from residence patch construction: patch summaries, sf-based patches, or raw points with patch numbers." />
+<meta property="og:title" content="Get derived data from residence patch construction. — wat_get_patch_summary" />
+<meta property="og:description" content="Get derived data from residence patch construction." />
 
 
 
@@ -113,37 +113,46 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get derived data from residence patch construction: patch summaries, sf-based patches, or raw points with patch numbers.</h1>
+    <h1>Get derived data from residence patch construction.</h1>
     <small class="dont-index">Source: <a href='https://github.com/pratikunterwegs/watlastools/blob/master/R/func_getPatchSummary.r'><code>R/func_getPatchSummary.r</code></a></small>
     <div class="hidden name"><code>wat_get_patch_summary.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Get derived data from residence patch construction: patch summaries, sf-based patches, or raw points with patch numbers.</p>
+    <p>Get derived data from residence patch construction.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>wat_get_patch_summary</span>(<span class='no'>res_patch_data</span>, <span class='kw'>whichData</span> <span class='kw'>=</span> <span class='st'>"summary"</span>, <span class='kw'>bufferSize</span> <span class='kw'>=</span> <span class='fl'>10</span>)</pre>
+    <pre class="usage"><span class='fu'>wat_get_patch_summary</span>(
+  <span class='no'>res_patch_data</span>,
+  <span class='kw'>which_data</span> <span class='kw'>=</span> <span class='st'>"summary"</span>,
+  <span class='kw'>buffer_radius</span> <span class='kw'>=</span> <span class='fl'>10</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>res_patch_data</th>
-      <td><p>A tibble with a nested list column of the raw data underlying each patch. This column is specified in the argument <code>dataColumn</code></p></td>
+      <td><p>A tibble with a nested list column of the raw data
+underlying each patch. This column is specified in the
+argument <code>dataColumn</code></p></td>
     </tr>
     <tr>
-      <th>whichData</th>
-      <td><p>Which data to return, the raw data underlying the patch, or a spatial features object with only the patch summary.</p></td>
+      <th>which_data</th>
+      <td><p>Which data to return, the raw data underlying the patch,
+or a spatial features object with only the patch summary.</p></td>
     </tr>
     <tr>
-      <th>bufferSize</th>
-      <td><p>Spatial buffer around points when requesting sf based polygons.</p></td>
+      <th>buffer_radius</th>
+      <td><p>Spatial buffer radius (in metres) around points when
+requesting sf based polygons.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of type <code>sf</code> or <code>tibble</code> depending on which data is requested.</p>
+    <p>An object of type <code>sf</code> or <code>tibble</code> depending on
+which data is requested.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
