@@ -122,15 +122,14 @@
     <p>A function to aggregate WATLAS data over an interval.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>wat_agg_data</span>(<span class='no'>df</span>, <span class='kw'>interval</span> <span class='kw'>=</span> <span class='fl'>60</span>)</pre>
+    <pre class="usage"><span class='fu'>wat_agg_data</span>(<span class='no'>data</span>, <span class='kw'>interval</span> <span class='kw'>=</span> <span class='fl'>60</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>df</th>
-      <td><p>Cleaned data - the output of the cleanData function - to aggregate.
-Must have a numeric column named time.</p></td>
+      <th>data</th>
+      <td><p>Cleaned data to aggregate. Must have a numeric column named time.</p></td>
     </tr>
     <tr>
       <th>interval</th>

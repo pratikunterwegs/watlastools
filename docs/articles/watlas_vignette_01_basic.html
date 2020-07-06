@@ -87,7 +87,7 @@
 <h1 class="hasAnchor">
 <a href="#concept-patches" class="anchor"></a>Concept: Patches</h1>
 <p>Patches are identified as shown in the schematic. More to be added in time.</p>
-<p><img src="../inst/schematic.png"><!-- --></p>
+<p><img src="../inst/schematic.png" width="1240"></p>
 </div>
 <div id="making-patches" class="section level1">
 <h1 class="hasAnchor">
@@ -128,7 +128,7 @@
 
 <span class="co"># classify residence points</span>
 <span class="no">temp_data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/wat_classify_points.html">wat_classify_points</a></span>(<span class="kw">data</span> <span class="kw">=</span> <span class="no">temp_data</span>,
-                                 <span class="kw">resTimeLimit</span> <span class="kw">=</span> <span class="fl">2</span>)
+                                 <span class="kw">lim_res_time</span> <span class="kw">=</span> <span class="fl">2</span>)
 
 <span class="co"># make residence patches with sensible parameters</span>
 <span class="no">patches</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/wat_make_res_patch.html">wat_make_res_patch</a></span>(<span class="kw">data</span> <span class="kw">=</span> <span class="no">temp_data</span>,
@@ -136,7 +136,7 @@
                               <span class="kw">lim_spat_indep</span> <span class="kw">=</span> <span class="fl">100</span>,
                               <span class="kw">lim_time_indep</span> <span class="kw">=</span> <span class="fl">30</span>,
                               <span class="kw">lim_rest_indep</span> <span class="kw">=</span> <span class="fl">30</span>,
-                              <span class="kw">minFixes</span> <span class="kw">=</span> <span class="fl">3</span>)</pre></body></html></div>
+                              <span class="kw">min_fixes</span> <span class="kw">=</span> <span class="fl">3</span>)</pre></body></html></div>
 </div>
 <div id="getting-data-from-patches" class="section level1">
 <h1 class="hasAnchor">
@@ -148,7 +148,7 @@
 <p>The patch summary is a data.table and has no complex (list, sf) column types. The patches can be visualised using ggplot (or anything else).</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="co"># get patch summary</span>
 <span class="no">patch_summary</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/wat_get_patch_summary.html">wat_get_patch_summary</a></span>(<span class="kw">res_patch_data</span> <span class="kw">=</span> <span class="no">patches</span>,
-                                       <span class="kw">whichData</span> <span class="kw">=</span> <span class="st">"summary"</span>)
+                                       <span class="kw">which_data</span> <span class="kw">=</span> <span class="st">"summary"</span>)
 
 <span class="co"># get the class of the full object and the column types</span>
 <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="no">patch_summary</span>)
@@ -160,7 +160,7 @@
 <p>The patch points are the raw points that make up the residence patches.</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="co"># get patch points</span>
 <span class="no">patch_points</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/wat_get_patch_summary.html">wat_get_patch_summary</a></span>(<span class="kw">res_patch_data</span> <span class="kw">=</span> <span class="no">patches</span>,
-                                      <span class="kw">whichData</span> <span class="kw">=</span> <span class="st">"points"</span>)
+                                      <span class="kw">which_data</span> <span class="kw">=</span> <span class="st">"points"</span>)
 
 <span class="co"># get class and column type</span>
 <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="no">patch_points</span>)
@@ -172,7 +172,7 @@
 <p>This should have the added class <code>sf</code>, and the polygons column should have the type <code>sfc_MULTIPOLYGON</code>.</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="co"># get patch points</span>
 <span class="no">patch_polygons</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/wat_get_patch_summary.html">wat_get_patch_summary</a></span>(<span class="kw">res_patch_data</span> <span class="kw">=</span> <span class="no">patches</span>,
-                                      <span class="kw">whichData</span> <span class="kw">=</span> <span class="st">"spatial"</span>)
+                                      <span class="kw">which_data</span> <span class="kw">=</span> <span class="st">"spatial"</span>)
 
 <span class="co"># get class and column type</span>
 <span class="fu"><a href="https://rdrr.io/r/base/class.html">class</a></span>(<span class="no">patch_polygons</span>)
@@ -182,6 +182,8 @@
 <h2 class="hasAnchor">
 <a href="#plot-data-types" class="anchor"></a>Plot data types</h2>
 <p>Look at patch points and summary. Polygons are constructed as <code>x</code> metre buffers around patch points, and are not covered here. The code to make this plot is in the watlas_vignette.Rmd fine in the package’s vignettes folder (the source for this document).</p>
+<pre><code>#&gt; Warning: package 'ggplot2' was built under R version 3.6.3
+#&gt; Warning: package 'patchwork' was built under R version 3.6.3</code></pre>
 <p><img src="watlas_vignette_01_basic_files/figure-html/show_all_figures-1.png" width="576"></p>
 </div>
 </div>
