@@ -3,6 +3,7 @@
 #' @param x A column name in a data.frame object that contains the numeric X or longitude coordinate for position data.
 #' @param y A column name in a data.frame object that contains the numeric Y or latitude coordinate for position data.
 #' @param data A dataframe object of or extending the class data.frame, which must contain at least two coordinate columns for the X and Y coordinates.
+#' @param time Time column to order by.
 #'
 #' @return Returns a vector of distances between consecutive points.
 #' @export

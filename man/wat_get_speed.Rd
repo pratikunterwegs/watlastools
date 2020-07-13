@@ -7,7 +7,8 @@
 wat_get_speed(data, x = "x", y = "y", time = "time")
 }
 \arguments{
-\item{data}{A dataframe or similar which must have the columns specified by \code{x}, \code{y}, and \code{time}.}
+\item{data}{A dataframe or similar which must have the columns
+specified by \code{x}, \code{y}, and \code{time}.}
 
 \item{x}{The x coordinate.}
 
@@ -16,7 +17,8 @@ wat_get_speed(data, x = "x", y = "y", time = "time")
 \item{time}{The timestamp in seconds since the UNIX epoch.}
 }
 \value{
-A vector of numerics representing speed. The first position is assigned a speed of NA.
+A vector of numerics representing speed.
+The first position is assigned a speed of NA.
 }
 \description{
 Calculate instantaenous speed.

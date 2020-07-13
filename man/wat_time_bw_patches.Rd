@@ -7,14 +7,15 @@
 wat_time_bw_patches(data, t1 = "time_end", t2 = "time_start")
 }
 \arguments{
-\item{data}{Dataframe containing at least the variables indicating patch start and end time.}
+\item{data}{Dataframe containing at least the variables indicating patch
+start and end time.}
 
 \item{t1}{The departure time from a hypothetical first patch.}
 
 \item{t2}{The arrival time at a hypothetical second patch.}
 }
 \value{
-A vector of times between patches.
+A vector of times in seconds between patches.
 }
 \description{
 Get time between patches.

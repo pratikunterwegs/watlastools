@@ -7,9 +7,11 @@
 wat_fix_speeds(data, x = "x", y = "y", time = "time", speed_cutoff)
 }
 \arguments{
-\item{data}{A dataframe or similar, containing the columns \code{x}, \code{y}, and \code{time}.}
+\item{data}{A dataframe or similar, containing the columns \code{x},
+\code{y}, and \code{time}.}
 
-\item{speed_cutoff}{A speed cutoff in metres per second.}
+\item{speed_cutoff}{A speed cutoff in metres per second, above which to
+remove both point locations as well as reflections.}
 }
 \value{
 

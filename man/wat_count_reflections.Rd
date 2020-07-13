@@ -4,7 +4,13 @@
 \alias{wat_count_reflections}
 \title{Count data reflections.}
 \usage{
-wat_count_reflections(data, speed_cutoff = 10)
+wat_count_reflections(
+  data,
+  x = "x",
+  y = "y",
+  time = "time",
+  speed_cutoff = 0.5
+)
 }
 \arguments{
 \item{data}{The data in which to count so-called reflections.}
