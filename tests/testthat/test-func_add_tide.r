@@ -5,7 +5,8 @@ testthat::test_that("adding tide data works", {
   testdata <- data.table::fread("../testdata/whole_season_tx_435.csv")[1:1000, ]
 
   # process with rm attractor, clean data, and add tide
-  { testoutput <- wat_clean_data(data = testdata,
+  {
+    testoutput <- wat_clean_data(data = testdata,
                                  moving_window = 5,
                                  nbs_min = 3,
                                  sd_threshold = 5e5)

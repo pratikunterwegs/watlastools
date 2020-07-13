@@ -1,12 +1,14 @@
 
 #' Calculate instantaenous speed.
 #'
-#' @param data A dataframe or similar which must have the columns specified by \code{x}, \code{y}, and \code{time}.
+#' @param data A dataframe or similar which must have the columns
+#' specified by \code{x}, \code{y}, and \code{time}.
 #' @param x The x coordinate.
 #' @param y The y coordinate.
 #' @param time The timestamp in seconds since the UNIX epoch.
 #'
-#' @return A vector of numerics representing speed. The first position is assigned a speed of NA.
+#' @return A vector of numerics representing speed.
+#' The first position is assigned a speed of NA.
 #' @export
 wat_get_speed <- function(data,
                           x = "x",
@@ -35,7 +37,8 @@ wat_get_speed <- function(data,
 
 #' Get time between patches.
 #'
-#' @param data Dataframe containing at least the variables indicating patch start and end time.
+#' @param data Dataframe containing at least the variables indicating patch
+#' start and end time.
 #' @param t1 The departure time from a hypothetical first patch.
 #' @param t2 The arrival time at a hypothetical second patch.
 #'
@@ -85,7 +88,7 @@ wat_count_reflections <- function(data,
                                   x = "x",
                                   y = "y",
                                   time = "time",
-                                  speed_cutoff = 10) {
+                                  speed_cutoff = 0.5) {
 
   # check the data
   watlastools:::wat_check_data(data,
