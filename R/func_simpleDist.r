@@ -7,27 +7,37 @@
 #' @return Returns a vector of distances between consecutive points.
 #' @export
 #'
-wat_simple_dist <- function(data, x = "x", y = "y"){
+wat_simple_dist <- function(data,
+                            x = "x",
+                            y = "y",
+                            time = "time") {
+
   #check for basic assumptions
   assertthat::assert_that(is.data.frame(data),
                           is.character(x),
                           is.character(y),
+                          is.character(time),
                           msg = "simpleDist: some data assumptions are not met")
 
-  dist <- dplyr::case_when(nrow(data) > 1 ~
-                             # cases where sufficient data
-                             { { x1 <- data[[x]][seq_len(nrow(data) - 1)]
-                                 x2 <- data[[x]][2:nrow(data)]
-                               }
-                               { y1 <- data[[y]][seq_len(nrow(data) - 1)]
-                                 y2 <- data[[y]][2:nrow(data)]
-                               }
+  # set order in time
+  if (!is.data.table(data)) {
+    setDT(data)
+  }
+  setorderv(data, time)
 
-                               # get dist
-                               c(NA, sqrt((x1 - x2) ^ 2 + (y1 - y2) ^ 2))
-                             },
-                           nrow(data) == 1 ~ {0.0},
-                           TRUE ~ { as.numeric(NA)})
+  # handle good data case
+  if (nrow(data) > 1) {
+      x1 <- data[[x]][seq_len(nrow(data) - 1)]
+      x2 <- data[[x]][-1]
+
+      y1 <- data[[y]][seq_len(nrow(data) - 1)]
+      y2 <- data[[y]][-1]
+
+    # get dist
+    dist <- c(NA, sqrt(((x2 - x1) ^ 2) + ((y2 - y1) ^ 2)))
+  } else if (nrow(data) == 1) {
+    dist <- NA_complex_
+  }
   return(dist)
 }
 
