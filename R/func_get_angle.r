@@ -5,7 +5,8 @@
 #' @param x The x coordinate.
 #' @param y The y coordinate.
 #' @param time The timestamp in seconds since the UNIX epoch.
-#' @return A vector of relative bearings in degrees. Negative degrees indicate 'left' turns.
+#' @return A vector of relative bearings in degrees.
+#' Negative degrees indicate 'left' turns.
 #' @export
 wat_get_angle <- function(data,
                           x = "x",
