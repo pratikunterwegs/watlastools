@@ -172,6 +172,9 @@ wat_count_reflections <- function(data,
 #' \code{y}, and \code{time}.
 #' @param speed_cutoff A speed cutoff in metres per second, above which to
 #' remove both point locations as well as reflections.
+#' @param x The X coordinate.
+#' @param y The Y coordinate.
+#' @param time The timestamp, preferably in seconds since the UNIX epoch.
 #'
 #' @return A dataframe with extreme speeds and reflections removed.
 #' @export
