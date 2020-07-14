@@ -1,6 +1,6 @@
-#' A function to remove so-called attractor points which have an unknown source. To be run before cleaning the data.
+#' Remove attractor points.
 #'
-#' @param df A dataframe or extension which contains capitalised X and Y coordinates.
+#' @param df A dataframe which contains capitalised X and Y coordinates.
 #' @param atp_xmin The min X coordinates of attractor locations.
 #' @param atp_xmax The max X coordinates of attractor locations.
 #' @param atp_ymin The min Y coordinates of attractor locations.
@@ -13,7 +13,7 @@ wat_rm_attractor <- function(df,
                             atp_xmin = 639470,
                             atp_xmax = 639472,
                             atp_ymin = 5887143,
-                            atp_ymax = 5887145){
+                            atp_ymax = 5887145) {
   X <- Y <- NULL
   # check input type
   assertthat::assert_that("data.frame" %in% class(df),
