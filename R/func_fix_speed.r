@@ -5,8 +5,11 @@
 #' \code{y}, and \code{time}.
 #' @param speed_cutoff A speed cutoff in metres per second, above which to
 #' remove both point locations as well as reflections.
+#' @param x The X coordinate.
+#' @param y The Y coordinate.
+#' @param time The timestamp, preferably in seconds since the UNIX epoch.
 #'
-#' @return
+#' @return A dataframe with extreme speeds and reflections removed.
 #' @export
 wat_fix_speeds <- function(data,
                            x = "x",
@@ -15,8 +18,8 @@ wat_fix_speeds <- function(data,
                            speed_cutoff) {
 
   # check the data
-  watlastools:::wat_check_data(data,
-                               names_expected = c(x, y, time))
+  wat_check_data(data,
+                 names_expected = c(x, y, time))
 
   # set order in time
   data.table::setorder(data, time)

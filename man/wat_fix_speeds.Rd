@@ -10,11 +10,17 @@ wat_fix_speeds(data, x = "x", y = "y", time = "time", speed_cutoff)
 \item{data}{A dataframe or similar, containing the columns \code{x},
 \code{y}, and \code{time}.}
 
+\item{x}{The X coordinate.}
+
+\item{y}{The Y coordinate.}
+
+\item{time}{The timestamp, preferably in seconds since the UNIX epoch.}
+
 \item{speed_cutoff}{A speed cutoff in metres per second, above which to
 remove both point locations as well as reflections.}
 }
 \value{
-
+A dataframe with extreme speeds and reflections removed.
 }
 \description{
 Fix extreme speeds and reflections.

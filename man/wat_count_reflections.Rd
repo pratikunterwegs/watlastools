@@ -15,6 +15,12 @@ wat_count_reflections(
 \arguments{
 \item{data}{The data in which to count so-called reflections.}
 
+\item{x}{The X coordinate.}
+
+\item{y}{The Y coordinate.}
+
+\item{time}{The timestamp, preferably in seconds since UNIX epoch.}
+
 \item{speed_cutoff}{The speed cutoff in metres per second by which to
 determine whether positions are reflected or not.}
 }
