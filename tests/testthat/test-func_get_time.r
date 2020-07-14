@@ -19,5 +19,5 @@ testthat::test_that("time bw patches works", {
     time_bw_small <- watlastools::wat_time_bw_patches(testdata_small,
                                                       t_start = "t1",
                                                       t_end = "t2")
-    testthat::expect_equal(time_bw_small, NA_complex_)
+    testthat::expect_equal(time_bw_small, NA_real_)
  })
