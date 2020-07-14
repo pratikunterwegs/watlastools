@@ -14,7 +14,7 @@ wat_fix_speeds(data, x = "x", y = "y", time = "time", speed_cutoff)
 remove both point locations as well as reflections.}
 }
 \value{
-
+A dataframe with extreme speeds and reflections removed.
 }
 \description{
 Fix extreme speeds and reflections.
