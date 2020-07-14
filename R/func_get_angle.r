@@ -33,7 +33,7 @@ wat_get_angle <- function(data,
     # get angle in degrees
     angle <- c(NA, atan2(y1 - y2, x1 - x2)) * 180 / pi
   } else if (nrow(data) == 1) {
-    angle <- NA_complex_
+    angle <- NA_real_
   }
   return(angle)
 }

@@ -26,9 +26,9 @@ wat_time_bw_patches <- function(data,
 
      time_between <- c(NA, time2 - time1)
   } else if (nrow(data) == 1) {
-     time_between <- NA_complex_
+     time_between <- NA_real_
   } else {
-     time_between <- NA_complex_
+     time_between <- NA_real_
   }
   
 

@@ -37,7 +37,7 @@ wat_simple_dist <- function(data,
     # get dist
     dist <- c(NA, sqrt(((x2 - x1) ^ 2) + ((y2 - y1) ^ 2)))
   } else if (nrow(data) == 1) {
-    dist <- NA_complex_
+    dist <- NA_real_
   }
   return(dist)
 }
