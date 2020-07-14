@@ -15,8 +15,8 @@ wat_get_speed <- function(data,
                           y = "y",
                           time = "time") {
 
-  watlastools:::wat_check_data(data,
-                               names_expected = c(x, y, time))
+  wat_check_data(data,
+                 names_expected = c(x, y, time))
 
   # set order in time
   data.table::setorder(data, time)
@@ -50,8 +50,8 @@ wat_get_angle <- function(data,
                           time = "time") {
 
   # check for column names
-  watlastools:::wat_check_data(data,
-                               names_expected = c(x, y, time))
+  wat_check_data(data,
+                 names_expected = c(x, y, time))
 
   # set order in time
   if (!is.data.table(data)) {
@@ -89,8 +89,8 @@ wat_time_bw_patches <- function(data,
                                 t2 = "time_start") {
 
   # check the patches for time
-  watlastools:::wat_check_data(data,
-                               names_expected = c(t1, t2))
+  wat_check_data(data,
+                 names_expected = c(t1, t2))
 
   # check there is more than one patch
   assertthat::assert_that(nrow(data) > 1,
@@ -106,7 +106,7 @@ wat_time_bw_patches <- function(data,
   time_between <- c(NA, t2 - t1)
 
   assertthat::assert_that(length(time_between) == nrow(data),
-  msg = "time_bw_patches: times between don't match number of patches")
+                          msg = "time_bw_patches: times between don't match number of patches")
 
   return(time_between)
 
@@ -117,6 +117,9 @@ wat_time_bw_patches <- function(data,
 #' @param data The data in which to count so-called reflections.
 #' @param speed_cutoff The speed cutoff in metres per second by which to
 #' determine whether positions are reflected or not.
+#' @param x The X coordinate.
+#' @param y The Y coordinate.
+#' @param time The timestamp, preferably in seconds since UNIX epoch.
 #'
 #' @return A named list with two elements \code{n_reflections} and
 #' \code{p_reflected}, the first indicating how many times there are
@@ -131,8 +134,8 @@ wat_count_reflections <- function(data,
                                   speed_cutoff = 0.5) {
 
   # check the data
-  watlastools:::wat_check_data(data,
-                               names_expected = c(x, y, time))
+  wat_check_data(data,
+                 names_expected = c(x, y, time))
 
   # set order in time
   data.table::setorder(data, time)
@@ -170,7 +173,7 @@ wat_count_reflections <- function(data,
 #' @param speed_cutoff A speed cutoff in metres per second, above which to
 #' remove both point locations as well as reflections.
 #'
-#' @return
+#' @return A dataframe with extreme speeds and reflections removed.
 #' @export
 wat_fix_speeds <- function(data,
                            x = "x",
@@ -179,8 +182,8 @@ wat_fix_speeds <- function(data,
                            speed_cutoff) {
 
   # check the data
-  watlastools:::wat_check_data(data,
-                               names_expected = c(x, y, time))
+  wat_check_data(data,
+                 names_expected = c(x, y, time))
 
   # set order in time
   data.table::setorder(data, time)
