@@ -17,7 +17,8 @@ specified by \code{x}, \code{y}, and \code{time}.}
 \item{time}{The timestamp in seconds since the UNIX epoch.}
 }
 \value{
-A vector of relative bearings in degrees. Negative degrees indicate 'left' turns.
+A vector of relative bearings in degrees.
+Negative degrees indicate 'left' turns.
 }
 \description{
 Get the angle (relative bearing) between points.
