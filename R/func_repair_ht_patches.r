@@ -74,15 +74,15 @@ wat_repair_ht_patches <- function(patch_data_list,
                                      tide_number)]
 
   edge_data_summary[, `:=`(timediff = c(Inf,
-                                 as.numeric(time_start[2:length(time_start)] -
-                                              time_end[1:length(time_end)-1])),
+                              as.numeric(time_start[2:length(time_start)] -
+                                      time_end[seq_len(length(time_end) - 1)])),
                            spatdiff = c(watlastools::wat_bw_patch_dist(
                              data = edge_data_summary,
                              x1 = "x_end", x2 = "x_start",
                              y1 = "y_end", y2 = "y_start")
                            ))]
 
-  edge_data_summary[1, 'spatdiff'] <- Inf
+  edge_data_summary[1, "spatdiff"] <- Inf
 
   # which patches are independent?
   # assign NA as tide number of non-independent patches
@@ -123,7 +123,7 @@ wat_repair_ht_patches <- function(patch_data_list,
   data.table::setnames(edge_data, old = "V1", new = "patchdata")
 
   # get basic data summaries
-  edge_data[, patchSummary := lapply(patchdata, function(dt){
+  edge_data[, patchSummary := lapply(patchdata, function(dt) {
     dt <- dt[, .(time, x, y,
                  resTime, tidaltime, waterlevel)]
     dt <- data.table::setDF(dt)
@@ -136,7 +136,7 @@ wat_repair_ht_patches <- function(patch_data_list,
 
   # advanced metrics on ungrouped data
   # distance in a patch in metres
-  edge_data[, distInPatch := lapply(patchdata, function(df){
+  edge_data[, distInPatch := lapply(patchdata, function(df) {
     sum(watlastools::wat_simple_dist(data = df), na.rm = TRUE)
   })]
 
@@ -152,7 +152,7 @@ wat_repair_ht_patches <- function(patch_data_list,
   # apply func bw patch dist reversing usual end and begin
   tempdata[, dispInPatch := sqrt((x_end - x_start) ^ 2 + (y_end - y_start) ^ 2)]
   # type of patch
-  edge_data[, type := lapply(patchdata, function(df){
+  edge_data[, type := lapply(patchdata, function(df) {
     a <- ifelse(sum(c("real", "inferred") %in% df$type) == 2,
                 "mixed", data.table::first(df$type))
     return(a)
@@ -161,7 +161,7 @@ wat_repair_ht_patches <- function(patch_data_list,
   # even more advanced metrics
   tempdata[, duration := (time_end - time_start)]
   # true spatial metrics
-  edge_data[, polygons := lapply(patchdata, function(df){
+  edge_data[, polygons := lapply(patchdata, function(df) {
     p1 <- sf::st_as_sf(df, coords = c("x", "y"))
     p2 <- sf::st_buffer(p1, dist = buffer_radius)
     p2 <- sf::st_union(p2)
@@ -170,13 +170,13 @@ wat_repair_ht_patches <- function(patch_data_list,
 
   # add area and circularity
   edge_data[, area := purrr::map_dbl(polygons, sf::st_area)]
-  edge_data[, `:=` (circularity = (4 * pi * area) /
-                      purrr::map_dbl(polygons, function(pgon) {
-                        boundary <- sf::st_boundary(pgon)
-                        perimeter <- sf::st_length(boundary)
-                        return(as.numeric(perimeter) ^ 2)
-                      }
-                      )
+  edge_data[, `:=`(circularity = (4 * pi * area) /
+                     purrr::map_dbl(polygons, function(pgon) {
+                       boundary <- sf::st_boundary(pgon)
+                       perimeter <- sf::st_length(boundary)
+                       return(as.numeric(perimeter) ^ 2)
+                     }
+                     )
   )]
 
   # remove polygons here too
@@ -205,8 +205,7 @@ wat_repair_ht_patches <- function(patch_data_list,
 
   return(data)
   },
-  error= function(e)
-  {
-    message(glue::glue('\nthere was an error in repair\n'))
+  error = function(e) {
+    message(glue::glue("there was an error in repair"))
   })
 }

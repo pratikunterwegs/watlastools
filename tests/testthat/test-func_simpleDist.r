@@ -9,9 +9,9 @@ testthat::test_that("simple distance and speed works", {
   test_output <- watlastools::wat_simple_dist(test_df, x = "a", y = "b")
 
   # get speeds as well
-  test_speed <- watlastools::wat_get_speed(test_df, x = "a", 
-                                          y = "b", 
-                                          time = "time")
+  test_speed <- watlastools::wat_get_speed(test_df, x = "a",
+                                           y = "b",
+                                           time = "time")
 
   # do tests
   # should return as many elements as nrows in df
@@ -29,7 +29,7 @@ testthat::test_that("simple distance and speed works", {
   # test that the vector class is numeric or double
   testthat::expect_type(test_output, "double")
   testthat::expect_type(test_speed, "double")
-  
+
   # test that the distances except first are 1 in this case
   testthat::expect_equal(test_output, c(NA, rep(1.0, 99)),
                              info = "the distance calculation is wrong")
@@ -37,7 +37,7 @@ testthat::test_that("simple distance and speed works", {
 })
 
 testthat::test_that("simple distance is correct", {
-  test_data <- data.table::fread("../testdata/whole_season_tx_435.csv")[1:1000, ]
+test_data <- data.table::fread("../testdata/whole_season_tx_435.csv")[1:1000, ]
 
   # distance using custom fun
   test_distances <- watlastools::wat_simple_dist(test_data,

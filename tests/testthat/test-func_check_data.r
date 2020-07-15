@@ -7,14 +7,12 @@ testthat::test_that("data has expected columns", {
                                      time = as.numeric(1:1e3))
 
     # expect no error
-    testthat::expect_silent(object = { 
+    testthat::expect_silent(object =
         watlastools:::wat_check_data(data = testdata,
-                                   names_expected = c("x", "y", "time"))
-    })
+                                   names_expected = c("x", "y", "time")))
 
     # expect an error
-    testthat::expect_error(expr = { 
+    testthat::expect_error(expr =
         watlastools:::wat_check_data(data = testdata,
-                                   names_expected = c("X", "Y", "TIME"))
-    })
+                                   names_expected = c("X", "Y", "TIME")))
  })

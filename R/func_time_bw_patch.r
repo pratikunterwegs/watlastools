@@ -30,7 +30,6 @@ wat_time_bw_patches <- function(data,
   } else {
      time_between <- NA_real_
   }
-  
 
   assertthat::assert_that(length(time_between) == nrow(data),
   msg = "time_bw_patches: times between don't match number of patches")

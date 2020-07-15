@@ -32,6 +32,15 @@ testthat::test_that("angles are calculated", {
   # the angles are rounded
   testthat::expect_equal(floor(test_output),
                          c(NA, rep(0, 28), NA),
-                         info = "the distance calculation is wrong")
+                         info = "the angle calculation is wrong")
+
+  # check no data case
+  test_df <- data.table::data.table(y = seq_len(1),
+                                    x = seq_len(1),
+                                    time = 1)
+  bad_angle <- watlastools::wat_turning_angle(test_df)
+
+  testthat::expect_equal(bad_angle, NA_real_,
+                         info = "bad data returns angles")
 
 })
