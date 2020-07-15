@@ -42,9 +42,6 @@ wat_repair_ht_patches <- function(patch_data_list,
                       "x_start", "y_start", "x_end", "y_end",
                       "time_start", "time_mean", "time_end",
                       "type")
-  purrr::walk(patch_data_list,
-              wat_check_data,
-              names_expected = names_required)
 
   # convert variable units
   lim_time_indep <- lim_time_indep * 60
@@ -55,11 +52,12 @@ wat_repair_ht_patches <- function(patch_data_list,
   # this needs to change
   patch_data_list <- patch_data_list[unlist(purrr::map(patch_data_list,
       function(l) {
-        is.data.table(l) & nrow(l) > 0 & all(namesReq %in% colnames(l))
+        data.table::is.data.table(l) & nrow(l) > 0 &
+          all(names_required %in% colnames(l))
         }
       )
   )]
-  data <- rbindlist(patch_data_list, use.names = TRUE)
+  data <- data.table::rbindlist(patch_data_list, use.names = TRUE)
 
   # select first and last rows from each tide_number
   # and assess independence
@@ -95,8 +93,9 @@ wat_repair_ht_patches <- function(patch_data_list,
   edge_data_summary[, newpatch := ifelse(newpatch == TRUE, patch, NA)]
 
   # nafill with last obs carried forward for now NA tides and patches
-  edge_data_summary[, `:=`(new_tide_number = nafill(tide_number, "locf"),
-                           newpatch = nafill(newpatch, "locf"))]
+  edge_data_summary[, `:=`(new_tide_number = data.table::nafill(tide_number,
+                                                                "locf"),
+                           newpatch = data.table::nafill(newpatch, "locf"))]
   edge_data_summary <- edge_data_summary[, .(tide_number, patch,
                                              new_tide_number, newpatch)]
 
@@ -121,7 +120,7 @@ wat_repair_ht_patches <- function(patch_data_list,
 
   edge_data <- edge_data[, .(list(.SD)),
                          by = .(id, tide_number, patch)]
-  setnames(edge_data, old = "V1", new = "patchdata")
+  data.table::setnames(edge_data, old = "V1", new = "patchdata")
 
   # get basic data summaries
   edge_data[, patchSummary := lapply(patchdata, function(dt){
@@ -155,7 +154,7 @@ wat_repair_ht_patches <- function(patch_data_list,
   # type of patch
   edge_data[, type := lapply(patchdata, function(df){
     a <- ifelse(sum(c("real", "inferred") %in% df$type) == 2,
-                "mixed", first(df$type))
+                "mixed", data.table::first(df$type))
     return(a)
   })]
 
@@ -171,14 +170,14 @@ wat_repair_ht_patches <- function(patch_data_list,
 
   # add area and circularity
   edge_data[, area := purrr::map_dbl(polygons, sf::st_area)]
-    edge_data[, `:=` (circularity = (4 * pi * area) /
-                        purrr::map_dbl(polygons, function(pgon) {
-                          boundary <- sf::st_boundary(pgon)
-                          perimeter <- sf::st_length(boundary)
-                          return(as.numeric(perimeter) ^ 2)
-                        }
-                        )
-    )]
+  edge_data[, `:=` (circularity = (4 * pi * area) /
+                      purrr::map_dbl(polygons, function(pgon) {
+                        boundary <- sf::st_boundary(pgon)
+                        perimeter <- sf::st_length(boundary)
+                        return(as.numeric(perimeter) ^ 2)
+                      }
+                      )
+  )]
 
   # remove polygons here too
   edge_data[, polygons := NULL]
@@ -198,7 +197,7 @@ wat_repair_ht_patches <- function(patch_data_list,
   data[, distBwPatch := wat_bw_patch_dist(data)]
 
   # fix patch numbers in tides
-  data[, patch := seq_len(nfixes), by = .(tide_number)]
+  data[, patch := seq_len(.N), by = .(tide_number)]
 
   # unlist all list columns
   data <- data[, lapply(.SD, unlist),
