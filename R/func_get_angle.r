@@ -49,7 +49,7 @@ wat_turning_angle <- function(data,
     angle <- angle * 180 / pi
 
     # subtract from 180 to get the external angle
-    angle <- 180 - angle
+    angle <- 180 - (angle)
 
     # add NA to maintain length
     angle <- c(NA_real_, angle, NA_real_)

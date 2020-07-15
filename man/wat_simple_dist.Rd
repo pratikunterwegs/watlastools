@@ -7,11 +7,15 @@
 wat_simple_dist(data, x = "x", y = "y", time = "time")
 }
 \arguments{
-\item{data}{A dataframe object of or extending the class data.frame, which must contain at least two coordinate columns for the X and Y coordinates.}
+\item{data}{A dataframe object of or extending the class data.frame,
+which must contain at least two coordinate columns for the X and Y
+coordinates.}
 
-\item{x}{A column name in a data.frame object that contains the numeric X or longitude coordinate for position data.}
+\item{x}{A column name in a data.frame object that contains the numeric
+X or longitude coordinate for position data.}
 
-\item{y}{A column name in a data.frame object that contains the numeric Y or latitude coordinate for position data.}
+\item{y}{A column name in a data.frame object that contains the numeric
+Y or latitude coordinate for position data.}
 
 \item{time}{Time column to order by.}
 }

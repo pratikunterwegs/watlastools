@@ -7,7 +7,8 @@
 wat_run_patch_vis_app()
 }
 \value{
-Opens a shiny app that allows tweaking of patch construction parameters.
+Opens a shiny app that allows tweaking of patch
+construction parameters.
 }
 \description{
 Run Shiny app to run examples of the patch functions.
