@@ -12,7 +12,8 @@ wat_repair_ht_patches(
 )
 }
 \arguments{
-\item{patch_data_list}{A list of data.tables, each the output of make_res_patch. Must have an sfc geometry column.}
+\item{patch_data_list}{A list of data.tables, each the output of
+make_res_patch. Must have an sfc geometry column.}
 
 \item{lim_spat_indep}{The spatial independence limit.}
 

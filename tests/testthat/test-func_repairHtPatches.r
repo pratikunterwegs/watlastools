@@ -16,10 +16,10 @@ testthat::test_that("high tide repair works", {
   })
 
   repaired_data <- watlastools::wat_repair_ht_patches(
-                                         patch_data_list = data_list,
-                                         lim_spat_indep = 100,
-                                         lim_time_indep = 30,
-                                         buffer_radius = 10)
+    patch_data_list = data_list,
+    lim_spat_indep = 100,
+    lim_time_indep = 30,
+    buffer_radius = 10)
 
   # do tests
   # test that the sf output class is at least sf
@@ -38,10 +38,10 @@ testthat::test_that("high tide repair works", {
                              class))
 
   # check that expected column names are present
-  purrr::walk(expnames, function(en){
+  purrr::walk(expnames, function(en) {
     testthat::expect_true(en %in% colnames(repaired_data),
-                    info = glue::glue('{expnames[i]} \\
-                                      expected in output but not produced'))
+                    info = glue::glue("{expnames[i]} \\
+                                      expected in output but not produced"))
   })
 
   # check that data are ordered in time
@@ -53,7 +53,7 @@ testthat::test_that("high tide repair works", {
   time_start <- repaired_data$time_start
   time_start <- time_start[seq_len(length(time_start) - 1)]
 
-  temp_indep <- c(NA, as.numeric((time_end-time_start)/60)) >= 30
+  temp_indep <- c(NA, as.numeric((time_end - time_start) / 60)) >= 30
   spat_indep <- wat_bw_patch_dist(repaired_data) >= 100
   rest_indep <- TRUE # for patches separated by residence time
 
