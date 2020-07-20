@@ -2,7 +2,7 @@ context("residence patches and classified points")
 testthat::test_that("patch calc on empirical data", {
 
   # read in data
-  somedata = data.table::fread("../testdata/435_025_revisit.csv")
+  somedata <- data.table::fread("../testdata/435_025_revisit.csv")
 
   # run function for patch inference
   inference_output <- watlastools::wat_infer_residence(data = somedata,
@@ -30,10 +30,10 @@ testthat::test_that("patch calc on empirical data", {
   expnames <- c("id", "tide_number", "type", "patch", "time_mean",
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
                 "distBwPatch",  "dispInPatch")
-  purrr::walk(expnames, function(expname){
+  purrr::walk(expnames, function(expname) {
     testthat::expect_true(expname %in% colnames(testoutput),
-                          info = glue::glue('{expname} expected in output \\
-                                            but not produced'))
+                          info = glue::glue("{expname} expected in output \\
+                                            but not produced"))
   })
 
   # check that data are ordered in time
@@ -44,7 +44,7 @@ testthat::test_that("patch calc on empirical data", {
 testthat::test_that("patch data access function works", {
 
   # read in data
-  somedata = data.table::fread("../testdata/435_025_revisit.csv")
+  somedata <- data.table::fread("../testdata/435_025_revisit.csv")
 
   # run function for patch inference
   inference_output <- watlastools::wat_infer_residence(data = somedata,
@@ -86,9 +86,9 @@ testthat::test_that("patch data access function works", {
   # test that names are present in output cols
   expnames <- c("id", "tide_number", "type", "patch", "time_mean",
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
-                "waterlevel_mean","distBwPatch", "dispInPatch")
+                "waterlevel_mean", "distBwPatch", "dispInPatch")
   # test col names in data access
-  purrr::walk(expnames, function(expname){
+  purrr::walk(expnames, function(expname) {
     testthat::expect_true(expname %in% colnames(data_access_sf),
                           info = glue::glue("{expname} expected in output \\
                                             but not produced"))

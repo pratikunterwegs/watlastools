@@ -2,7 +2,7 @@
 % Please edit documentation in R/func_rmAttractor.r
 \name{wat_rm_attractor}
 \alias{wat_rm_attractor}
-\title{A function to remove so-called attractor points which have an unknown source. To be run before cleaning the data.}
+\title{Remove attractor points.}
 \usage{
 wat_rm_attractor(
   df,
@@ -13,7 +13,7 @@ wat_rm_attractor(
 )
 }
 \arguments{
-\item{df}{A dataframe or extension which contains capitalised X and Y coordinates.}
+\item{df}{A dataframe which contains capitalised X and Y coordinates.}
 
 \item{atp_xmin}{The min X coordinates of attractor locations.}
 
@@ -27,5 +27,5 @@ wat_rm_attractor(
 A data frame of tracking locations with attractor points removed.
 }
 \description{
-A function to remove so-called attractor points which have an unknown source. To be run before cleaning the data.
+Remove attractor points.
 }

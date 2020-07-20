@@ -21,7 +21,8 @@ wat_infer_residence <- function(data,
 
   # handle global variable issues
   inf_patch <- nfixes <- posId <- NULL
-  spat_diff <- time <- tidaltime <- time_diff <- type <- x <- y <- npoints <- NULL
+  spat_diff <- time <- tidaltime <- time_diff <- type <- NULL
+  x <- y <- npoints <- NULL
   nfixes <- NULL
   waterlevel <- NULL
   # adding the inferPatches argument to prep for inferring
