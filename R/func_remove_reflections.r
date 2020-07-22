@@ -5,8 +5,6 @@
 #' @param x The name of the X coordinate column.
 #' @param y The name of the Y coordinate column.
 #' @param time The name of the timestamp column.
-#' @param adjacency_speed The speed (in m/s) between two 'good' ends of a
-#' reflection.
 #' @param point_angle_cutoff The turning angle (in degrees) above which
 #' high instantaneous speeds are considered an anomaly rather than fast transit.
 #' @param reflection_speed_cutoff The speed (in m/s) above which an anomaly is
@@ -18,7 +16,6 @@ wat_remove_reflections <- function(data,
                                    x = "x",
                                    y = "y",
                                    time = "time",
-                                   adjacency_speed = 1,
                                    point_angle_cutoff = 45,
                                    reflection_speed_cutoff = 40) {
 
@@ -47,24 +44,17 @@ wat_remove_reflections <- function(data,
 
     # all subsequent points are suspect
     suspect_point <- anchor_point + 1
+    suspect_speeds <- data[suspect_point:nrow(data), speed]
 
-    # set an anchor point
-    x_anchor <- data[anchor_point, ][[x]]
-    y_anchor <- data[anchor_point, ][[y]]
-    time_anchor <- data[anchor_point, ][[time]]
+    # get the next highest speed, may be higher
+    # use gt not gte else will get first suspect speed
+    nx_high_speed <- which(suspect_speeds > data[suspect_point, speed])[1]
+    if (is.na(nx_high_speed)) {
+      nx_high_speed <- which(suspect_speeds == sort(suspect_speeds,
+                                                    decreasing = TRUE)[2])
+    }
+    reflection_end <- anchor_point + nx_high_speed + 1
 
-    # get the speed between anchor and all subsequent points
-    anchor_distance <- sqrt((x_anchor -
-                               data[suspect_point:nrow(data), ][[x]])^2 +
-                              (y_anchor -
-                                 data[suspect_point:nrow(data), ][[y]])^2)
-    anchor_tdiff <- data[suspect_point:nrow(data), ][[time]] - time_anchor
-    anchor_speed <- anchor_distance / anchor_tdiff
-
-    # identify where the reflection ends
-    # the reflection ends with the last point to have an extreme speed
-    reflection_end <- anchor_point + which(anchor_speed <=
-                                             adjacency_speed)[1] + 1
     # when reflections do not end remove all subsequent data
     # this is more likely in smaller subsets
     if (is.na(reflection_end)) {

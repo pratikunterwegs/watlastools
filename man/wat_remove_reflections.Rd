@@ -9,7 +9,6 @@ wat_remove_reflections(
   x = "x",
   y = "y",
   time = "time",
-  adjacency_speed = 1,
   point_angle_cutoff = 45,
   reflection_speed_cutoff = 40
 )
@@ -22,9 +21,6 @@ wat_remove_reflections(
 \item{y}{The name of the Y coordinate column.}
 
 \item{time}{The name of the timestamp column.}
-
-\item{adjacency_speed}{The speed (in m/s) between two 'good' ends of a
-reflection.}
 
 \item{point_angle_cutoff}{The turning angle (in degrees) above which
 high instantaneous speeds are considered an anomaly rather than fast transit.}
