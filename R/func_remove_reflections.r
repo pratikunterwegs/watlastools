@@ -44,27 +44,16 @@ wat_remove_reflections <- function(data,
 
     # all subsequent points are suspect
     suspect_point <- anchor_point + 1
+    suspect_speeds <- data[suspect_point:nrow(data), speed]
 
-    # set an anchor point
-    x_anchor <- data[anchor_point, ][[x]]
-    y_anchor <- data[anchor_point, ][[y]]
-    time_anchor <- data[anchor_point, ][[time]]
-
-    # get the speed between anchor and all subsequent points
-    anchor_distance <- sqrt((x_anchor -
-                               data[suspect_point:nrow(data), ][[x]])^2 +
-                              (y_anchor -
-                                 data[suspect_point:nrow(data), ][[y]])^2)
-    ad_10_lim_1 <- anchor_distance[1] - (anchor_distance[1] / 10)
-
-    # anchor_tdiff <- data[suspect_point:nrow(data), ][[time]] - time_anchor
-    # anchor_speed <- anchor_distance / anchor_tdiff
-
-    # identify where the reflection ends
-    # the reflection ends with the first point that nearer to the
-    # anchor than the first anchor distance - 10%
-    reflection_end <- anchor_point +
-      which(anchor_distance < ad_10_lim_1)[1] + 1
+    # get the next highest speed, may be higher
+    # use gt not gte else will get first suspect speed
+    nx_high_speed <- which(suspect_speeds > data[suspect_point, speed])[1]
+    if (is.na(nx_high_speed)) {
+      nx_high_speed <- which(suspect_speeds == sort(suspect_speeds,
+                                                    decreasing = TRUE)[2])
+    }
+    reflection_end <- anchor_point + nx_high_speed + 1
 
     # when reflections do not end remove all subsequent data
     # this is more likely in smaller subsets
