@@ -17,7 +17,6 @@ testthat::test_that("reflections are removed", {
                  angle = wat_turning_angle(test_df))]
 
   test_output <- wat_remove_reflections(test_df,
-                                        adjacency_speed = 0.5,
                                         reflection_speed_cutoff = 10,
                                         point_angle_cutoff = 5)
 
