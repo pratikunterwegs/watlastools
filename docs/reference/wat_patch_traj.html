@@ -129,29 +129,44 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>df</th>
-      <td><p>A dataframe with at least 2 pairs of coordinate columns, such as X_end Y_end, X_start, Y_start.</p></td>
+      <td><p>A dataframe with at least 2 pairs of coordinate columns,
+such as X_end Y_end, X_start, Y_start.</p></td>
     </tr>
     <tr>
       <th>x1</th>
-      <td><p>Coordinate column for the beginning X coordinate of the linestring; this should be the last X coordinate of each patch if inter-patch linestrngs are to be constructed. It is possible to use the X_start coordinate, but this will lead to issues and nonsensical output at this point.</p></td>
+      <td><p>Coordinate column for the beginning X coordinate of the linestring;
+this should be the last X coordinate of each patch if inter-patch
+linestrings are to be constructed. It is possible to use the X_start
+coordinate, but this will lead to issues and nonsensical output at
+this point.</p></td>
     </tr>
     <tr>
       <th>x2</th>
-      <td><p>Coordinate column for the end X coordinate of the linestring; this should be the first X coordinate of each patch if inter-patch linestrngs are to be constructed.</p></td>
+      <td><p>Coordinate column for the end X coordinate of the linestring;
+this should be the first X coordinate of each patch if inter-patch
+linestrings are to be constructed.</p></td>
     </tr>
     <tr>
       <th>y1</th>
-      <td><p>Coordinate column for the beginning Y coordinate of the linestring; this should be the last Y coordinate of each patch if inter-patch linestrngs are to be constructed. It is possible to use the X_start coordinate, but this will lead to issues and nonsensical output at this point.</p></td>
+      <td><p>Coordinate column for the beginning Y coordinate of the
+linestring; this should be the last Y coordinate of each patch if inter-patch
+ linestrings are to be constructed. It is possible to use the X_start
+ coordinate, but this will lead to issues and nonsensical output at
+ this point.</p></td>
     </tr>
     <tr>
       <th>y2</th>
-      <td><p>Coordinate column for the end Y coordinate of the linestring; this should be the first Y coordinate of each patch if inter-patch linestrngs are to be constructed.</p></td>
+      <td><p>Coordinate column for the end Y coordinate of the linestring; this
+should be the first Y coordinate of each patch if inter-patch linestrngs are
+to be constructed.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An <code>sf MULTILINESTRING</code> object representing the linear path between N patches, starting at the end point of the first patch, and ending at the first point of the Nth patch.</p>
+    <p>An <code>sf MULTILINESTRING</code> object representing the linear path
+between N patches, starting at the end point of the first patch, and ending
+at the first point of the Nth patch.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

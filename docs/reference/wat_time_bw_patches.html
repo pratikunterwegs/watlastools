@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Construct residence patches from classified residence data. — wat_make_res_patch • watlastools</title>
+<title>Get time between patches. — wat_time_bw_patches • watlastools</title>
 
 
 <!-- jquery -->
@@ -41,8 +41,8 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Construct residence patches from classified residence data. — wat_make_res_patch" />
-<meta property="og:description" content="Construct residence patches from classified residence data." />
+<meta property="og:title" content="Get time between patches. — wat_time_bw_patches" />
+<meta property="og:description" content="Get time between patches." />
 
 
 
@@ -113,71 +113,38 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Construct residence patches from classified residence data.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/pratikunterwegs/watlastools/blob/master/R/func_makeResPatch.r'><code>R/func_makeResPatch.r</code></a></small>
-    <div class="hidden name"><code>wat_make_res_patch.Rd</code></div>
+    <h1>Get time between patches.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/pratikunterwegs/watlastools/blob/master/R/func_time_bw_patch.r'><code>R/func_time_bw_patch.r</code></a></small>
+    <div class="hidden name"><code>wat_time_bw_patches.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Construct residence patches from classified residence data.</p>
+    <p>Get time between patches.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>wat_make_res_patch</span>(
-  <span class='no'>data</span>,
-  <span class='kw'>buffer_radius</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='kw'>lim_spat_indep</span> <span class='kw'>=</span> <span class='fl'>100</span>,
-  <span class='kw'>lim_time_indep</span> <span class='kw'>=</span> <span class='fl'>30</span>,
-  <span class='kw'>lim_rest_indep</span> <span class='kw'>=</span> <span class='fl'>30</span>,
-  <span class='kw'>min_fixes</span> <span class='kw'>=</span> <span class='fl'>3</span>
-)</pre>
+    <pre class="usage"><span class='fu'>wat_time_bw_patches</span>(<span class='no'>data</span>, <span class='kw'>t_end</span> <span class='kw'>=</span> <span class='st'>"time_end"</span>, <span class='kw'>t_start</span> <span class='kw'>=</span> <span class='st'>"time_start"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>data</th>
-      <td><p>A dataframe of values of any class that is or extends data.frame.
-The dataframe must contain at least two spatial coordinates, <code>x</code> and
-<code>y</code>, and a temporal coordinate, <code>time</code>. The names of columns
-specifying these can be passed as arguments below.</p></td>
+      <td><p>Dataframe containing at least the variables indicating patch
+start and end time.</p></td>
     </tr>
     <tr>
-      <th>buffer_radius</th>
-      <td><p>A numeric value specifying the radius of the buffer to
-be considered around each coordinate point. May be thought of as the distance
- that an individual can access, assess, or otherwise cover when at a discrete
-  point in space.</p></td>
+      <th>t_end</th>
+      <td><p>The departure time from a hypothetical first patch.</p></td>
     </tr>
     <tr>
-      <th>lim_spat_indep</th>
-      <td><p>A numeric value of time in minutes of the time
-difference between two patches for them to be considered independent.</p></td>
-    </tr>
-    <tr>
-      <th>lim_time_indep</th>
-      <td><p>A numeric value of distance in metres of the spatial
-distance between two patches for them to the considered independent.</p></td>
-    </tr>
-    <tr>
-      <th>lim_rest_indep</th>
-      <td><p>A numeric value of time in minutes of the difference
-in residence times between two patches for them to be considered independent.</p></td>
-    </tr>
-    <tr>
-      <th>min_fixes</th>
-      <td><p>The minimum number of fixes for a group of
-spatially-proximate number of ponts to be considered a preliminary residence
-patch.</p></td>
+      <th>t_start</th>
+      <td><p>The arrival time at a hypothetical second patch.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data.frame extension object. This dataframe has the added column
-<code>resPatch</code> based on cumulative patch summing. Depending on whether
-<code>inferPatches = TRUE</code>, the dataframe has additional inferred points.
-An additional column is created in each case, indicating whether the data are
- empirical fixes ('real') or 'inferred'.</p>
+    <p>A vector of times in seconds between patches.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
