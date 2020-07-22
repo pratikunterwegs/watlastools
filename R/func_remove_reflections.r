@@ -22,7 +22,11 @@ wat_remove_reflections <- function(data,
                                    point_angle_cutoff = 45,
                                    reflection_speed_cutoff = 40) {
 
-  setorderv(data, time)
+  # check data
+  watlastools:::wat_check_data(data, names_expected = c(x, y, time))
+
+  # set order
+  data.table::setorderv(data, time)
 
   # get speed and angle
   data[, `:=`(speed = watlastools::wat_get_speed(data),
