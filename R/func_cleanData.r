@@ -92,7 +92,7 @@ wat_clean_data <- function(data,
     data[, lapply(.SD,
                  function(z) {
                    rev(stats::runmed(rev(stats::runmed(z, moving_window)),
-                                 moving_window)})),
+                                 moving_window))}),
          .SDcols = c("X", "Y")]
 
     ## postprocess (clean) data, start by selecting columns
