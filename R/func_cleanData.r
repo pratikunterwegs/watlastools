@@ -91,8 +91,8 @@ wat_clean_data <- function(data,
     # includes reversed smoothing to get rid of a possible phase shift
     data[, lapply(.SD,
                  function(z) {
-                   stats::runmed(rev(stats::runmed(z, moving_window)),
-                                 moving_window)}),
+                   rev(stats::runmed(rev(stats::runmed(z, moving_window)),
+                                 moving_window)})),
          .SDcols = c("X", "Y")]
 
     ## postprocess (clean) data, start by selecting columns
