@@ -17,7 +17,8 @@ wat_remove_reflections <- function(data,
                                    y = "y",
                                    time = "time",
                                    point_angle_cutoff = 45,
-                                   reflection_speed_cutoff = 40) {
+                                   reflection_speed_cutoff = 40,
+                                   est_ref_len = 1000) {
 
   # check data
   watlastools:::wat_check_data(data, names_expected = c(x, y, time))
@@ -42,13 +43,16 @@ wat_remove_reflections <- function(data,
 
   while (anchor_point < nrow(data) - 1) {
 
-    # all subsequent points are suspect
+    # the next est_ref_len subsequent points are suspect
     suspect_point <- anchor_point + 1
-    suspect_speeds <- data[suspect_point:nrow(data), speed]
+    suspect_speeds <- data[suspect_point:est_ref_len, speed]
 
     # get the next highest speed, may be higher
     # use gt not gte else will get first suspect speed
     nx_high_speed <- which(suspect_speeds > data[suspect_point, speed])[1]
+    # this gets the next highest speed, which should be the end of the
+    # reflection, but may also be the beginning or end of another reflection
+    # this method is best applied to small subsets of data or similar
     if (is.na(nx_high_speed)) {
       nx_high_speed <- which(suspect_speeds == sort(suspect_speeds,
                                                     decreasing = TRUE)[2])
@@ -80,7 +84,7 @@ wat_remove_reflections <- function(data,
       anchor_point <- reflection_end + next_anchor
       # check for errors in order
       assertthat::assert_that(anchor_point > reflection_end,
-                              msg = glue::glue("anchor point {anchor_point} is \\
+                            msg = glue::glue("anchor point {anchor_point} is \\
                             before reflection end {reflection_end}"))
       # message
       message(glue::glue("next anchor is {anchor_point}"))
