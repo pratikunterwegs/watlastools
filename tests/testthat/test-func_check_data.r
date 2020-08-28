@@ -8,11 +8,11 @@ testthat::test_that("data has expected columns", {
 
     # expect no error
     testthat::expect_silent(object =
-        watlastools:::wat_check_data(data = testdata,
-                                   names_expected = c("x", "y", "time")))
+        wat_check_data(data = testdata,
+        names_expected = c("x", "y", "time")))
 
     # expect an error
     testthat::expect_error(expr =
-        watlastools:::wat_check_data(data = testdata,
-                                   names_expected = c("X", "Y", "TIME")))
+        wat_check_data(data = testdata,
+        names_expected = c("X", "Y", "TIME")))
  })
