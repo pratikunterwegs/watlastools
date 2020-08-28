@@ -12,8 +12,8 @@ wat_time_bw_patches <- function(data,
                                 t_start = "time_start") {
 
   # check the patches for time
-  watlastools:::wat_check_data(data,
-                               names_expected = c(t_end, t_start))
+  wat_check_data(data,
+                 names_expected = c(t_end, t_start))
 
   # order by time start
   data.table::setorderv(data, t_start)
