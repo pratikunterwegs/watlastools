@@ -4,7 +4,7 @@ output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Using watlastools}
   %\VignetteEncoding{UTF-8}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knitr}
 editor_options: 
   chunk_output_type: console
 ---
@@ -24,15 +24,9 @@ knitr::opts_chunk$set(
 library(watlastools)
 ```
 
-# Concept: Patches
+# Making residence patches
 
-Patches are identified as shown in the schematic. More to be added in time.
-
-```{r show_patch_schematic, eval=TRUE,echo = FALSE}
-knitr::include_graphics("../inst/schematic.png")
-```
-
-# Making patches
+Residence patches are the end goal of the `watlastools` workflow. They are a conveninent way of synthesising large amounts of tracking data into a few spatially explicit units that have a set of associated (mean) coordinates, as well as ecologically relevant coordinates such as duration.
 
 Begin by reading in the data.
 

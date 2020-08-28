@@ -83,15 +83,10 @@
     
 <p>This vignette shows the basics of using watlastools. It is a work in progress. watlastools has two main purposes: accessing and cleaning data, and identifying residence patches from the data. Only the latter is covered here.</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">watlastools</span>)</pre></body></html></div>
-<div id="concept-patches" class="section level1">
+<div id="making-residence-patches" class="section level1">
 <h1 class="hasAnchor">
-<a href="#concept-patches" class="anchor"></a>Concept: Patches</h1>
-<p>Patches are identified as shown in the schematic. More to be added in time.</p>
-<p><img src="../inst/schematic.png" width="1240"></p>
-</div>
-<div id="making-patches" class="section level1">
-<h1 class="hasAnchor">
-<a href="#making-patches" class="anchor"></a>Making patches</h1>
+<a href="#making-residence-patches" class="anchor"></a>Making residence patches</h1>
+<p>Residence patches are the end goal of the <code>watlastools</code> workflow. They are a conveninent way of synthesising large amounts of tracking data into a few spatially explicit units that have a set of associated (mean) coordinates, as well as ecologically relevant coordinates such as duration.</p>
 <p>Begin by reading in the data.</p>
 <div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="co"># read data and see leading lines</span>
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">data.table</span>)
