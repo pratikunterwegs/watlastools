@@ -10,7 +10,8 @@ wat_remove_reflections(
   y = "y",
   time = "time",
   point_angle_cutoff = 45,
-  reflection_speed_cutoff = 40
+  reflection_speed_cutoff = 40,
+  est_ref_len = 1000
 )
 }
 \arguments{
@@ -27,6 +28,9 @@ high instantaneous speeds are considered an anomaly rather than fast transit.}
 
 \item{reflection_speed_cutoff}{The speed (in m/s) above which an anomaly is
 detected when combined with a high turning angle.}
+
+\item{est_ref_len}{The maximum number of positions to search after the anchor
+for a potential reflection end.}
 }
 \value{
 A dataframe with reflections removed.
