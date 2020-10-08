@@ -1,6 +1,4 @@
-# [WATLAS Tools](https://pratikunterwegs.github.io/watlastools/)
-
-**Functions to handle data from the Wadden Sea ATLAS project**
+# watlastools: Tools for Data from the Wadden Sea ATLAS System**
 
 <!-- badges: start -->
   [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/pratikunterwegs/watlastools?branch=master&svg=true)](https://ci.appveyor.com/project/pratikunterwegs/watlastools) 
@@ -28,17 +26,9 @@ devtools::install_github("pratikunterwegs/watlastools")
 ```
 ## Shiny application
 
-Package functionality is demonstrated by the inbuilt `shiny` application.
+The Shiny app no longer works. The code is outdated and needs to be fixed.
+The function has been made unavailable until then.
 
-![](https://github.com/pratikunterwegs/watlastools/raw/master/inst/screenshot_app.png) 
+## Documentation
 
-
-```r
-# run the app from the package
-library(watlastools)
-wat_run_patch_vis_app()
-```
-
-## Wiki
-
-Read the [wiki](https://github.com/pratikunterwegs/watlastools/wiki) for a description of the functions' intended usage.
+Read the function documentation and see the vignettes on the website: https://pratikunterwegs.github.io/watlastools/
