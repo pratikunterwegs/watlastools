@@ -1,4 +1,4 @@
-# watlastools: Tools for Data from the Wadden Sea ATLAS System**
+# watlastools: Tools for Data from the Wadden Sea ATLAS System
 
 <!-- badges: start -->
   [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/pratikunterwegs/watlastools?branch=master&svg=true)](https://ci.appveyor.com/project/pratikunterwegs/watlastools) 
