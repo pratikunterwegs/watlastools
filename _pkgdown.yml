@@ -2,7 +2,13 @@ destination: docs
 pandoc: '2.5'
 pkgdown: 1.4.1
 pkgdown_sha: ~
-articles: []
+articles:
+  - title: Using watlastools
+    contents: 
+    - watlas_vignette_01_basic
+  - title: Iterating patch construction
+    contents:
+    - watlas_vignette_02_iteration
 template:
   params:
     bootswatch: sandstone

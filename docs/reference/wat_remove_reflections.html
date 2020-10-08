@@ -128,7 +128,8 @@
   <span class='kw'>y</span> <span class='kw'>=</span> <span class='st'>"y"</span>,
   <span class='kw'>time</span> <span class='kw'>=</span> <span class='st'>"time"</span>,
   <span class='kw'>point_angle_cutoff</span> <span class='kw'>=</span> <span class='fl'>45</span>,
-  <span class='kw'>reflection_speed_cutoff</span> <span class='kw'>=</span> <span class='fl'>40</span>
+  <span class='kw'>reflection_speed_cutoff</span> <span class='kw'>=</span> <span class='fl'>40</span>,
+  <span class='kw'>est_ref_len</span> <span class='kw'>=</span> <span class='fl'>1000</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -159,6 +160,11 @@ high instantaneous speeds are considered an anomaly rather than fast transit.</p
       <th>reflection_speed_cutoff</th>
       <td><p>The speed (in m/s) above which an anomaly is
 detected when combined with a high turning angle.</p></td>
+    </tr>
+    <tr>
+      <th>est_ref_len</th>
+      <td><p>The maximum number of positions to search after the anchor
+for a potential reflection end.</p></td>
     </tr>
     </table>
 
