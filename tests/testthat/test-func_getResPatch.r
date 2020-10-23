@@ -6,7 +6,7 @@ testthat::test_that("patch calc on empirical data", {
 
   # run function for patch inference
   inference_output <- watlastools::wat_infer_residence(data = somedata,
-                                                      inf_patch_time_diff = 30,
+                                                      inf_patch_time_diff = 60,
                                                       inf_patch_spat_diff = 100)
 
 
@@ -30,11 +30,8 @@ testthat::test_that("patch calc on empirical data", {
   expnames <- c("id", "tide_number", "type", "patch", "time_mean",
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
                 "distBwPatch",  "dispInPatch")
-  purrr::walk(expnames, function(expname) {
-    testthat::expect_true(expname %in% colnames(testoutput),
-                          info = glue::glue("{expname} expected in output \\
-                                            but not produced"))
-  })
+  watlastools:::wat_check_data(data = testoutput,
+                               names_expected = expnames)
 
   # check that data are ordered in time
   testthat::expect_gt(min(as.numeric(diff(testoutput$time_mean)),
@@ -62,16 +59,18 @@ testthat::test_that("patch data access function works", {
                                              lim_time_indep = 30)
 
   # access testoutput summary
-  copy1 <- copy2 <- copy3 <- testoutput
-  data_access_smry <- watlastools::wat_get_patch_summary(res_patch_data = copy1,
+  data_access_smry <- watlastools::wat_get_patch_summary(res_patch_data =
+                                                           copy(testoutput),
                                                       which_data = "summary")
 
   # access testoutput spatial
-  data_access_sf <- watlastools::wat_get_patch_summary(res_patch_data = copy2,
+  data_access_sf <- watlastools::wat_get_patch_summary(res_patch_data =
+                                                         copy(testoutput),
                                                   which_data = "spatial")
 
   # access testoutput spatial
-  data_access_pt <- watlastools::wat_get_patch_summary(res_patch_data = copy3,
+  data_access_pt <- watlastools::wat_get_patch_summary(res_patch_data =
+                                                         copy(testoutput),
                                                   which_data = "points")
 
   # test class summary
@@ -88,11 +87,8 @@ testthat::test_that("patch data access function works", {
                 "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
                 "waterlevel_mean", "distBwPatch", "dispInPatch")
   # test col names in data access
-  purrr::walk(expnames, function(expname) {
-    testthat::expect_true(expname %in% colnames(data_access_sf),
-                          info = glue::glue("{expname} expected in output \\
-                                            but not produced"))
-  })
+  watlastools:::wat_check_data(data_access_sf,
+                               expnames)
 
   # check that data are ordered in time
   testthat::expect_gt(min(as.numeric(diff(testoutput$time_mean)),
