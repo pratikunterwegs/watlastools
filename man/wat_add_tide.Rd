@@ -2,8 +2,7 @@
 % Please edit documentation in R/func_addTide.r
 \name{wat_add_tide}
 \alias{wat_add_tide}
-\title{A function to add high tide data to position data; also calculates the
-time of each position since high tide.}
+\title{Add high tide data to position data.}
 \usage{
 wat_add_tide(data, tide_data)
 }
@@ -19,6 +18,5 @@ A datatable class object (extends data.frame) which has the
 additional columns tide_number and time (in mins) since high tide.
 }
 \description{
-A function to add high tide data to position data; also calculates the
-time of each position since high tide.
+Also calculates the time of each position since high tide.
 }

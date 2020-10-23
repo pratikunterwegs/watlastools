@@ -5,5 +5,4 @@ testthat::skip("testing mysql call not currently possible")
 testthat::test_that("data access function works", {
 
   # add and run local tests
-
 })

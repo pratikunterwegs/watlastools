@@ -34,31 +34,37 @@ wat_patch_traj <- function(df,
   assertthat::assert_that(is.data.frame(df),
     msg = glue::glue('trajPatch: input not a \\
                      dataframe object, has class \\
-                     {stringr::str_flatten(class(df), collapse = " ")}!'))
+                     {stringr::str_flatten(class(df), collapse = " ")}!')
+  )
 
   # convert df to data_frame
   data.table::setDT(df)
 
   # select cols from dfs
-  { x1 <- df[[x1]]
+  {
+    x1 <- df[[x1]]
     x2 <- df[[x2]]
-    x1 <- x1[seq_len(length(x1) - 1)];
+    x1 <- x1[seq_len(length(x1) - 1)]
     x2 <- x2[2:length(x2)]
   }
-  { y1 <- df[[y1]]
+  {
+    y1 <- df[[y1]]
     y2 <- df[[y2]]
-    y1 <- y1[seq_len(length(y1) - 1)];
+    y1 <- y1[seq_len(length(y1) - 1)]
     y2 <- y2[2:length(y2)]
   }
   # make temptib
   tempTib <- tibble::tibble(x1, y1, x2, y2)
   # add matrix as list col
   tempTib <- dplyr::mutate(tempTib,
-                           ptsMat = purrr::pmap(tempTib,
-                                                function(x1, x2, y1, y2)
-  { m <- matrix(c(x1, y1, x2, y2), ncol = 2, byrow = T)
-    return(m)
-  }))
+    ptsMat = purrr::pmap(
+      tempTib,
+      function(x1, x2, y1, y2) {
+        m <- matrix(c(x1, y1, x2, y2), ncol = 2, byrow = T)
+        return(m)
+      }
+    )
+  )
 
   # make multilinestring from list col
   ml <- sf::st_multilinestring(tempTib$ptsMat)

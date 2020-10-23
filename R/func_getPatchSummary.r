@@ -13,15 +13,16 @@
 #' @export
 #'
 wat_get_patch_summary <- function(res_patch_data,
-                            which_data = "summary",
-                            buffer_radius = 10) {
+                                  which_data = "summary",
+                                  buffer_radius = 10) {
   id <- tide_number <- patch <- patchdata <- NULL
 
   # check somedata is a data.frame and has a resTime column
   assertthat::assert_that(is.data.frame(res_patch_data),
-              msg = glue::glue("getPatchData: input not a dataframe object, \\
+    msg = glue::glue("getPatchData: input not a dataframe object, \\
               has class {stringr::str_flatten(class(res_patch_data),
-                               collapse = ' ')}!"))
+                               collapse = ' ')}!")
+  )
   # convert both to DT if not
   if (!data.table::is.data.table(res_patch_data)) {
     data.table::setDT(res_patch_data)
@@ -58,9 +59,10 @@ wat_get_patch_summary <- function(res_patch_data,
 
   # get points if asked
   if (which_data %in% c("points")) {
-    res_patch_data <- res_patch_data[, .(id, tide_number, patch, patchdata)]
+    res_patch_data <- res_patch_data[, list(id, tide_number, patch, patchdata)]
     res_patch_data <- res_patch_data[, unlist(patchdata, recursive = FALSE),
-                         by = .(id, tide_number, patch)]
+      by = list(id, tide_number, patch)
+    ]
   }
   return(res_patch_data)
 }

@@ -22,28 +22,33 @@
 #' @export
 #'
 wat_get_data <- function(tag,
-                      tracking_time_start,
-                      tracking_time_end,
-                      tag_prefix = "31001000",
-                      database = "some_database",
-                      host = "abtdb1.nioz.nl",
-                      username = "someuser",
-                      password = "somepassword") {
+                         tracking_time_start,
+                         tracking_time_end,
+                         tag_prefix = "31001000",
+                         database = "some_database",
+                         host = "abtdb1.nioz.nl",
+                         username = "someuser",
+                         password = "somepassword") {
 
   # check data types
   assertthat::assert_that(is.numeric(tag),
-                          msg = "tag provided must be numeric")
+    msg = "tag provided must be numeric"
+  )
   assertthat::assert_that(is.character(tracking_time_start),
-                          msg = "start tracking time is not a character")
+    msg = "start tracking time is not a character"
+  )
   assertthat::assert_that(is.character(tracking_time_end),
-                          msg = "end tracking time is not a character")
+    msg = "end tracking time is not a character"
+  )
   assertthat::assert_that(as.character(tag_prefix) == "31001000",
-                          msg = "tag prefix is not 31001000")
+    msg = "tag prefix is not 31001000"
+  )
 
   db_params <- c(host, username, password)
   purrr::walk(db_params, function(this_param) {
     assertthat::assert_that(is.character(this_param),
-                            msg = glue::glue("{this_param} is not a character"))
+      msg = glue::glue("{this_param} is not a character")
+    )
   })
 
   # process function arguments for sql database
@@ -62,10 +67,11 @@ wat_get_data <- function(tag,
 
   # connect to the ATLAS server
   mydb <- RMySQL::dbConnect(RMySQL::MySQL(),
-                           user = username,
-                           password = password,
-                           dbname = database,
-                           host = host)
+    user = username,
+    password = password,
+    dbname = database,
+    host = host
+  )
 
   # SQL code to retrive data
   sql_query <- glue::glue("select TAG, TIME, X, Y, NBS, VARX, VARY, COVXY

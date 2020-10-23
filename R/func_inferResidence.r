@@ -16,8 +16,8 @@
 #' @export
 #'
 wat_infer_residence <- function(data,
-                               inf_patch_time_diff = 30,
-                               inf_patch_spat_diff = 100) {
+                                inf_patch_time_diff = 30,
+                                inf_patch_spat_diff = 100) {
 
   # handle global variable issues
   inf_patch <- nfixes <- posId <- NULL
@@ -30,8 +30,9 @@ wat_infer_residence <- function(data,
 
   # check if data frame
   assertthat::assert_that(is.data.frame(data),
-        msg = glue::glue('inferResidence: input not a dataframe object,\\
-        has class {stringr::str_flatten(class(data), collapse = " ")}!'))
+    msg = glue::glue('inferResidence: input not a dataframe object,\\
+        has class {stringr::str_flatten(class(data), collapse = " ")}!')
+  )
 
   # convert both to DT if not
   if (is.data.table(data) != TRUE) {
@@ -48,13 +49,15 @@ wat_infer_residence <- function(data,
   # include asserts checking for required columns
   purrr::walk(names_req, function(nr) {
     assertthat::assert_that(nr %in% data_names,
-                msg = glue::glue("{nr} is required but missing from data!"))
+      msg = glue::glue("{nr} is required but missing from data!")
+    )
   })
 
   # SET THE data IN ORDER OF TIME and assert this has worked
   data.table::setorder(data, time)
   assertthat::assert_that(min(diff(data$time)) >= 0,
-                          msg = "data for segmentation is not ordered by time")
+    msg = "data for segmentation is not ordered by time"
+  )
 
   # make a data with id, tide_number and time seq, with missing x and y
   # identify where there are missing segments more than 2 mins long
@@ -62,14 +65,17 @@ wat_infer_residence <- function(data,
   # merge with true data
   temp_data <- data[!is.na(time), ]
   # get difference in time and space
-  temp_data <- temp_data[, `:=`(time_diff = c(diff(time), NA),
-                         spat_diff = watlastools::wat_simple_dist(
-                           data = temp_data, x = "x", y = "y"))]
+  temp_data <- temp_data[, `:=`(
+    time_diff = c(diff(time), NA),
+    spat_diff = wat_simple_dist(
+      data = temp_data, x = "x", y = "y"
+    )
+  )]
 
   # find missing patches if time_diff is greater than specified
   # AND spat_diff is less than specified (100 m)
   temp_data[, inf_patch := cumsum((time_diff > inf_patch_time_diff) &
-            (spat_diff < inf_patch_spat_diff))]
+    (spat_diff < inf_patch_spat_diff))]
 
   # subset the data to collect only the first two points of an inferred patch
   # these are the first and last points of a travel trajectory
@@ -79,13 +85,15 @@ wat_infer_residence <- function(data,
   # now count the max posId per patch, if less than 2, merge with next patch
   temp_data[, npoints := max(posId), by = "inf_patch"]
   temp_data[, inf_patch := dplyr::if_else(npoints == 2,
-                                  true = inf_patch,
-                                  false = as.integer(inf_patch + 1))]
+    true = inf_patch,
+    false = as.integer(inf_patch + 1)
+  )]
   temp_data <- temp_data[npoints >= 2, ]
 
   # recount the number of positions, each inferred patch must have minimum 2 pos
   assertthat::assert_that(min(temp_data$npoints) > 1,
-                          msg = "some inferred patches with only 1 position")
+    msg = "some inferred patches with only 1 position"
+  )
   # remove unn columns
   data.table::set(temp_data, , c("posId", "npoints"), NULL)
 
@@ -97,49 +105,66 @@ wat_infer_residence <- function(data,
   if (nrow(temp_data) >= 2) {
     # make list column of expected times with 3 second interval
     # assume coordinate is the mean between 'takeoff' and 'landing'
-    inf_patch_data <- temp_data[, nfixes := length(seq(from = min(time,
-                                                                  na.rm = T),
-                                                       to = max(time,
-                                                                na.rm = T),
-                                                       by = 3)),
-                         by = c("id", "tide_number", "inf_patch")]
+    inf_patch_data <- temp_data[, nfixes := length(seq(
+      from = min(time,
+        na.rm = T
+      ),
+      to = max(time,
+        na.rm = T
+      ),
+      by = 3
+    )),
+    by = c("id", "tide_number", "inf_patch")
+    ]
 
     # an expectation of integer type is created in time
-    inf_patch_data <- inf_patch_data[, .(time = mean(time),
-                                x = mean(x),
-                                y = mean(y),
-                                resTime = mean(time_diff)),
-                             by = c("id", "tide_number", "inf_patch", "nfixes")]
+    inf_patch_data <- inf_patch_data[, list(
+      time = mean(time),
+      x = mean(x),
+      y = mean(y),
+      resTime = mean(time_diff)
+    ),
+    by = c("id", "tide_number", "inf_patch", "nfixes")
+    ]
 
     inf_patch_data <- inf_patch_data[inf_patch > 0, ]
     inf_patch_data <- inf_patch_data[, type := "inferred"]
 
-    rm(temp_data); gc()
+    rm(temp_data)
+    gc()
 
     # remove inf_patch and nfixes
     data.table::set(inf_patch_data, , c("inf_patch", "nfixes"), NULL)
 
     # merge inferred data to empirical data
     data <- data.table::merge.data.table(data, inf_patch_data,
-                                         by = intersect(names(data),
-                                                        names(inf_patch_data)),
-                                         all = TRUE)
+      by = intersect(
+        names(data),
+        names(inf_patch_data)
+      ),
+      all = TRUE
+    )
   }
 
   # sort by time
   data.table::setorder(data, time)
   # remove coordidx
-  data[, `:=`(coordIdx = NULL, posID = NULL,
-           fpt = NULL, revisits = NULL,
-           temp_time = NULL)]
+  data[, `:=`(
+    coordIdx = NULL, posID = NULL,
+    fpt = NULL, revisits = NULL,
+    temp_time = NULL
+  )]
 
   # fill tidal time and waterlevel
-  data[, `:=`(tidaltime = nafill(tidaltime, "locf"),
-           waterlevel = nafill(waterlevel, "locf"))]
+  data[, `:=`(
+    tidaltime = nafill(tidaltime, "locf"),
+    waterlevel = nafill(waterlevel, "locf")
+  )]
 
   # check this has worked
   assertthat::assert_that(min(diff(data$time)) >= 0,
-                          msg = "data for segmentation is not ordered by time")
+    msg = "data for segmentation is not ordered by time"
+  )
   return(data)
 }
 

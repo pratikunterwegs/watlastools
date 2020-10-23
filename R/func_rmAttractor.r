@@ -10,31 +10,36 @@
 #' @export
 #'
 wat_rm_attractor <- function(df,
-                            atp_xmin = 639470,
-                            atp_xmax = 639472,
-                            atp_ymin = 5887143,
-                            atp_ymax = 5887145) {
+                             atp_xmin = 639470,
+                             atp_xmax = 639472,
+                             atp_ymin = 5887143,
+                             atp_ymax = 5887145) {
   X <- Y <- NULL
   # check input type
   assertthat::assert_that("data.frame" %in% class(df),
-                          msg = "rmAttractor: input not a dataframe object!")
+    msg = "rmAttractor: input not a dataframe object!"
+  )
 
   # include asserts checking for required columns
   dfnames <- colnames(df)
   namesReq <- c("X", "Y")
   purrr::walk(namesReq, function(nr) {
     assertthat::assert_that(nr %in% dfnames,
-                            msg = glue::glue("rmAttractor: {nr} is
-                         required but missing from data!"))
+      msg = glue::glue("rmAttractor: {nr} is
+                         required but missing from data!")
+    )
   })
 
 
   # check input length of attractors
-  assertthat::assert_that(length(unique(length(atp_xmin),
-                                        length(atp_xmax),
-                                        length(atp_ymin),
-                                        length(atp_ymax))) == 1,
-                        msg = "rmAttractor: different attractor coord lengths")
+  assertthat::assert_that(length(unique(
+    length(atp_xmin),
+    length(atp_xmax),
+    length(atp_ymin),
+    length(atp_ymax)
+  )) == 1,
+  msg = "rmAttractor: different attractor coord lengths"
+  )
 
   # convert to data.table
   # convert both to DT if not
@@ -43,15 +48,17 @@ wat_rm_attractor <- function(df,
   }
 
   # remove attractors
-  purrr::pwalk(list(atp_xmin, atp_xmax, atp_ymin, atp_ymax),
-               function(axmin, axmax, aymin, aymax) {
-
-                 df <- df[!((X > axmin) & (X < axmax) &
-                              (Y > aymin) & (Y < aymax)), ]
-               })
+  purrr::pwalk(
+    list(atp_xmin, atp_xmax, atp_ymin, atp_ymax),
+    function(axmin, axmax, aymin, aymax) {
+      df <- df[!((X > axmin) & (X < axmax) &
+        (Y > aymin) & (Y < aymax)), ]
+    }
+  )
 
   assertthat::assert_that("data.frame" %in% class(df),
-    msg = "cleanData: cleanded data is not a dataframe object!")
+    msg = "cleanData: cleanded data is not a dataframe object!"
+  )
 
   return(df)
 }
