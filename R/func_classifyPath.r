@@ -13,22 +13,25 @@
 #'
 
 wat_classify_points <- function(data,
-                             lim_res_time = 2,
-                             min_fix_warning = 5) {
+                                lim_res_time = 2,
+                                min_fix_warning = 5) {
   # check data is a data.frame and has a resTime column
   # check if data frame
   assertthat::assert_that(is.data.frame(data),
-              msg = glue::glue("wat_classify_points: \\
+    msg = glue::glue("wat_classify_points: \\
                                 input not a dataframe object, \\
                                 has class \\
                                 {stringr::str_flatten(class(data),
-                                 collapse = ' ')}!"))
+                                 collapse = ' ')}!")
+  )
   assertthat::assert_that("resTime" %in% names(data),
-                          msg = "wat_classify_points: data has no \\
-                          residence time column")
+    msg = "wat_classify_points: data has no \\
+                          residence time column"
+  )
   assertthat::assert_that(min(c(lim_res_time)) > 1,
-                          msg = "wat_classify_points: function arguments \\
-                          are not positive")
+    msg = "wat_classify_points: function arguments \\
+                          are not positive"
+  )
   # make datatable to use functions
   if (!data.table::is.data.table(data)) {
     data.table::setDT(data)
@@ -41,7 +44,8 @@ wat_classify_points <- function(data,
 
   # check this has worked
   assertthat::assert_that(min(diff(data$time)) >= 0,
-                          msg = "data for segmentation is not ordered by time")
+    msg = "data for segmentation is not ordered by time"
+  )
   # prep to assign sequence to res patches
   # to each id.tide combination
   # remove NA vals in resTime
@@ -57,7 +61,6 @@ wat_classify_points <- function(data,
   }
 
   return(data)
-
 }
 
 # ends here
