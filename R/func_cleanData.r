@@ -75,7 +75,7 @@ wat_clean_data <- function(data,
 
     if (filter_speed == TRUE) {
       # filter for insane speeds if asked
-      data[, sld := watlastools::wat_simple_dist(data,
+      data[, sld := wat_simple_dist(data,
                                                  x = "X",
                                                  y = "Y",
                                                  time = "TIME")]
@@ -96,7 +96,7 @@ wat_clean_data <- function(data,
          .SDcols = c("X", "Y")]
 
     ## postprocess (clean) data, start by selecting columns
-    data <- data[, .(TAG, posID, TIME, ts, X_raw, Y_raw,
+    data <- data[, list(TAG, posID, TIME, ts, X_raw, Y_raw,
                     NBS, VARX, VARY, COVXY, X, Y, SD)]
 
     # rename x,y,time to lower case

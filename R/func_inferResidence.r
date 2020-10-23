@@ -63,7 +63,7 @@ wat_infer_residence <- function(data,
   temp_data <- data[!is.na(time), ]
   # get difference in time and space
   temp_data <- temp_data[, `:=`(time_diff = c(diff(time), NA),
-                         spat_diff = watlastools::wat_simple_dist(
+                         spat_diff = wat_simple_dist(
                            data = temp_data, x = "x", y = "y"))]
 
   # find missing patches if time_diff is greater than specified
@@ -105,7 +105,7 @@ wat_infer_residence <- function(data,
                          by = c("id", "tide_number", "inf_patch")]
 
     # an expectation of integer type is created in time
-    inf_patch_data <- inf_patch_data[, .(time = mean(time),
+    inf_patch_data <- inf_patch_data[, list(time = mean(time),
                                 x = mean(x),
                                 y = mean(y),
                                 resTime = mean(time_diff)),

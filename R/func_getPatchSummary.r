@@ -58,9 +58,9 @@ wat_get_patch_summary <- function(res_patch_data,
 
   # get points if asked
   if (which_data %in% c("points")) {
-    res_patch_data <- res_patch_data[, .(id, tide_number, patch, patchdata)]
+    res_patch_data <- res_patch_data[, list(id, tide_number, patch, patchdata)]
     res_patch_data <- res_patch_data[, unlist(patchdata, recursive = FALSE),
-                         by = .(id, tide_number, patch)]
+                         by = list(id, tide_number, patch)]
   }
   return(res_patch_data)
 }

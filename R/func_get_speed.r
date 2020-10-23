@@ -21,7 +21,7 @@ wat_get_speed <- function(data,
   data.table::setorderv(data, time)
 
   # get distance
-  distance <- watlastools::wat_simple_dist(data,
+  distance <- wat_simple_dist(data,
                                            x, y, time)
 
   # get time
