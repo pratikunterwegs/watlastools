@@ -17,12 +17,13 @@ wat_simple_dist <- function(data,
                             y = "y",
                             time = "time") {
 
-  #check for basic assumptions
+  # check for basic assumptions
   assertthat::assert_that(is.data.frame(data),
-                          is.character(x),
-                          is.character(y),
-                          is.character(time),
-                          msg = "simpleDist: some data assumptions are not met")
+    is.character(x),
+    is.character(y),
+    is.character(time),
+    msg = "simpleDist: some data assumptions are not met"
+  )
 
   # set order in time
   if (!is.data.table(data)) {
@@ -32,14 +33,14 @@ wat_simple_dist <- function(data,
 
   # handle good data case
   if (nrow(data) > 1) {
-      x1 <- data[[x]][seq_len(nrow(data) - 1)]
-      x2 <- data[[x]][-1]
+    x1 <- data[[x]][seq_len(nrow(data) - 1)]
+    x2 <- data[[x]][-1]
 
-      y1 <- data[[y]][seq_len(nrow(data) - 1)]
-      y2 <- data[[y]][-1]
+    y1 <- data[[y]][seq_len(nrow(data) - 1)]
+    y2 <- data[[y]][-1]
 
     # get dist
-    dist <- c(NA, sqrt(((x2 - x1) ^ 2) + ((y2 - y1) ^ 2)))
+    dist <- c(NA, sqrt(((x2 - x1)^2) + ((y2 - y1)^2)))
   } else if (nrow(data) == 1) {
     dist <- NA_real_
   }
