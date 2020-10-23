@@ -65,10 +65,7 @@ wat_make_res_patch <- function(data,
                  "time", "type", "resTime", "tidaltime")
 
   # include asserts checking for required columns
-  purrr::walk(names_req, function(nr) {
-    assertthat::assert_that(nr %in% data_names,
-                msg = glue::glue("{nr} is required but missing from data!"))
-  })
+  wat_check_data(data, nr)
 
   # make datatable to use functions
   if (!is.data.table(data)) {
@@ -82,15 +79,21 @@ wat_make_res_patch <- function(data,
   tryCatch(expr = {
     # identify spatial overlap
     # assign spat diff columns
-    data[, `:=`(spat_diff = watlastools::wat_simple_dist(data = data,
-                                                        x = "x", y = "y"))]
-
+    data[, `:=`(
+        spat_diff = atlastools::atl_simple_dist(
+          data = data,
+          x = "x", y = "y"
+        ),
+        time_diff = c(Inf, as.numeric(diff(time)))
+      )]
+    
     # first spatial difference is infinity for calculation purposes
     data[1, c("spat_diff")] <- Inf
 
     # merge points if not spatially independent
     # compare distance from previous point to buffer_radius
-    data <- data[, patch := cumsum(spat_diff > (2 * buffer_radius))]
+    data <- data[, patch := cumsum(spat_diff > (2 * buffer_radius) |
+        time_diff > lim_time_indep)]
 
     # count fixes and patch and remove small patches
     # count number of points per patch
