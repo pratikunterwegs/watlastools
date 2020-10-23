@@ -19,7 +19,7 @@ testthat::test_that("adding tide data works", {
                             class = c("data.table", "data.frame"))
 
   # check that data are ordered in time
-  testthat::expect_gt(min(as.numeric(diff(testoutput$TIME)), na.rm = TRUE), 0)
+  testthat::expect_gt(min(as.numeric(diff(testoutput$time)), na.rm = TRUE), 0)
 
   # check that tide number and time since high tide are added
   # test that names are present in output cols
