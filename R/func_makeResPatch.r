@@ -65,7 +65,7 @@ wat_make_res_patch <- function(data,
                  "time", "type", "resTime", "tidaltime")
 
   # include asserts checking for required columns
-  wat_check_data(data, nr)
+  wat_check_data(data, names_expected = names_req)
 
   # make datatable to use functions
   if (!is.data.table(data)) {
@@ -86,7 +86,7 @@ wat_make_res_patch <- function(data,
         ),
         time_diff = c(Inf, as.numeric(diff(time)))
       )]
-    
+
     # first spatial difference is infinity for calculation purposes
     data[1, c("spat_diff")] <- Inf
 
