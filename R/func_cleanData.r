@@ -64,15 +64,15 @@ wat_clean_data <- function(data,
 
   # delete positions with approximated standard deviations above SD_threshold,
   # and below minimum number of base stations (NBS_min)
-  data <- data[SD < sd_threshold & NBS >= nbs_min, ]
+  data_ <- data[SD < sd_threshold & NBS >= nbs_min, ]
 
   prefix_num <- 31001000000
 
   # begin processing if there is data
-  if (nrow(data) > 1) {
+  if (nrow(data_) > 1) {
     # add position id and change time to seconds
-    data[, `:=`(
-      posID = seq_len(nrow(data)),
+    data_[, `:=`(
+      posID = seq_len(nrow(data_)),
       TIME = as.numeric(TIME) / 1e3,
       TAG = as.numeric(TAG) - prefix_num,
       X_raw = X,
@@ -81,22 +81,22 @@ wat_clean_data <- function(data,
 
     if (filter_speed == TRUE) {
       # filter for insane speeds if asked
-      data[, sld := wat_simple_dist(data,
+      data_[, sld := wat_simple_dist(data_,
         x = "X",
         y = "Y",
         time = "TIME"
       )]
-      data[, sld_speed := sld / c(NA, as.numeric(diff(TIME)))]
-      data <- data[sld_speed <= (speed_cutoff / 3.6), ]
-      data[, `:=`(sld = NULL, sld_speed = NULL)]
+      data_[, sld_speed := sld / c(NA, as.numeric(diff(TIME)))]
+      data_ <- data_[sld_speed <= (speed_cutoff / 3.6), ]
+      data_[, `:=`(sld = NULL, sld_speed = NULL)]
     }
 
     # make separate timestamp col
-    data[, ts := as.POSIXct(TIME, tz = "CET", origin = "1970-01-01")]
+    data_[, ts := as.POSIXct(TIME, tz = "CET", origin = "1970-01-01")]
 
     # median filter
     # includes reversed smoothing to get rid of a possible phase shift
-    data[, lapply(
+    data_[, lapply(
       .SD,
       function(z) {
         rev(stats::runmed(
@@ -108,30 +108,30 @@ wat_clean_data <- function(data,
     .SDcols = c("X", "Y")
     ]
 
-    ## postprocess (clean) data, start by selecting columns
-    data <- data[, list(
+    ## postprocess (clean) data_, start by selecting columns
+    data_ <- data_[, list(
       TAG, posID, TIME, ts, X_raw, Y_raw,
       NBS, VARX, VARY, COVXY, X, Y, SD
     )]
 
     # rename x,y,time to lower case
-    setnames(data,
+    setnames(data_,
       old = c("X", "Y", "TAG", "TIME"),
       new = c("x", "y", "id", "time")
     )
   } else {
-    data <- data.table::data.table(matrix(NA, nrow = 0, ncol = 12))
-    setnames(data, c(
+    data_ <- data.table::data.table(matrix(NA, nrow = 0, ncol = 12))
+    setnames(data_, c(
       "id", "posID", "time", "ts", "X_raw",
       "Y_raw", "NBS", "VARX", "VARY", "COVXY", "x", "y"
     ))
   }
 
-  assertthat::assert_that("data.frame" %in% class(data),
+  assertthat::assert_that("data.frame" %in% class(data_),
     msg = "cleanData: cleanded data is not a dataframe object!"
   )
 
-  return(data)
+  return(data_)
 }
 
 # ends here
