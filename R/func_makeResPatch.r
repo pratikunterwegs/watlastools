@@ -80,9 +80,9 @@ wat_make_res_patch <- function(data,
     # identify spatial overlap
     # assign spat diff columns
     data[, `:=`(
-        spat_diff = atlastools::atl_simple_dist(
+        spat_diff = wat_simple_dist(
           data = data,
-          x = "x", y = "y"
+          x = "x", y = "y"  
         ),
         time_diff = c(Inf, as.numeric(diff(time)))
       )]
@@ -105,7 +105,7 @@ wat_make_res_patch <- function(data,
 
     # get time mean and extreme points for spatio-temporal independence calc
     # nest data
-    data <- data[, .(list(.SD)), by = .(id, tide_number, patch)]
+    data <- data[, list(list(.SD)), by = list(id, tide_number, patch)]
     setnames(data, old = "V1", new = "patchdata")
     data[, nfixes := purrr::map_int(patchdata, nrow)]
 
@@ -125,7 +125,7 @@ wat_make_res_patch <- function(data,
 
     # assess independence using summary data
     patch_summary <- data[, unlist(patch_summary, recursive = FALSE),
-                          by = .(id, tide_number, patch)]
+                          by = list(id, tide_number, patch)]
     data[, patch_summary := NULL]
     # get time bewteen start of n+1 and end of n
     patch_summary[, time_diff := c(Inf,
@@ -134,7 +134,7 @@ wat_make_res_patch <- function(data,
                                                                1)]))]
     # get spatial difference from last to first point
     patch_summary[, spat_diff :=
-                    c(watlastools::wat_bw_patch_dist(data = patch_summary,
+                    c(wat_bw_patch_dist(data = patch_summary,
                                                 x1 = "x_end", x2 = "x_start",
                                                 y1 = "y_end", y2 = "y_start"))]
     # set spat_diff 1 to Inf
@@ -149,19 +149,19 @@ wat_make_res_patch <- function(data,
                                          restime_diff > lim_rest_indep)]
 
     # get cols with old and new patch
-    patch_summary <- patch_summary[, .(patch, newpatch)]
+    patch_summary <- patch_summary[, list(patch, newpatch)]
 
     # basic patch metrics for new patches
     # join patchdata to patch summary by new patch
     # expand data to prepare for new patches
     data <- data[, unlist(patchdata, recursive = FALSE),
-                 by = .(id, tide_number, patch)]
+                 by = list(id, tide_number, patch)]
 
     data <- data.table::merge.data.table(data, patch_summary, by = "patch")
     data[, `:=`(patch = newpatch, newpatch = NULL)]
 
     # nest data again
-    data <- data[, .(list(.SD)), by = .(id, tide_number, patch)]
+    data <- data[, list(list(.SD)), by = list(id, tide_number, patch)]
     setnames(data, old = "V1", new = "patchdata")
     data[, nfixes := lapply(patchdata, nrow)]
 
@@ -183,14 +183,14 @@ wat_make_res_patch <- function(data,
     # advanced metrics on ungrouped data
     # distance in a patch in metres
     data[, distInPatch := purrr::map_dbl(patchdata, function(df) {
-      sum(watlastools::wat_simple_dist(data = df), na.rm = TRUE)
+      sum(wat_simple_dist(data = df), na.rm = TRUE)
     })]
 
     # distance between patches
     tempdata <- data[, unlist(patch_summary, recursive = FALSE),
-                     by = .(id, tide_number, patch)]
+                     by = list(id, tide_number, patch)]
     data[, patch_summary := NULL]
-    data[, distBwPatch := watlastools::wat_bw_patch_dist(data = tempdata,
+    data[, distBwPatch := wat_bw_patch_dist(data = tempdata,
                                                   x1 = "x_end", x2 = "x_start",
                                                   y1 = "y_end", y2 = "y_start")]
     # displacement in a patch
