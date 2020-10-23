@@ -63,12 +63,12 @@ wat_repair_ht_patches <- function(patch_data_list,
   # and assess independence
   # subset edge cases from main data
   edge_data <- data[data[, .I[patch == min(patch) | patch == max(patch)],
-                         by = .(tide_number)]$V1]
+                         by = list(tide_number)]$V1]
 
   data <- data[data[, .I[patch != min(patch) & patch != max(patch)],
-                    by = .(tide_number)]$V1]
+                    by = list(tide_number)]$V1]
 
-  edge_data_summary <- edge_data[, .(patch, time_start, time_end,
+  edge_data_summary <- edge_data[, list(patch, time_start, time_end,
                                      x_start, x_end,
                                      y_start, y_end,
                                      tide_number)]
@@ -76,7 +76,7 @@ wat_repair_ht_patches <- function(patch_data_list,
   edge_data_summary[, `:=`(timediff = c(Inf,
                               as.numeric(time_start[2:length(time_start)] -
                                       time_end[seq_len(length(time_end) - 1)])),
-                           spatdiff = c(watlastools::wat_bw_patch_dist(
+                           spatdiff = c(wat_bw_patch_dist(
                              data = edge_data_summary,
                              x1 = "x_end", x2 = "x_start",
                              y1 = "y_end", y2 = "y_start")
@@ -96,12 +96,12 @@ wat_repair_ht_patches <- function(patch_data_list,
   edge_data_summary[, `:=`(new_tide_number = data.table::nafill(tide_number,
                                                                 "locf"),
                            newpatch = data.table::nafill(newpatch, "locf"))]
-  edge_data_summary <- edge_data_summary[, .(tide_number, patch,
+  edge_data_summary <- edge_data_summary[, list(tide_number, patch,
                                              new_tide_number, newpatch)]
 
   # merge summary with data
   # make a temporary reeating seq of id, tide and patch
-  temp_ed <- edge_data[, .(id, tide_number, patch)]
+  temp_ed <- edge_data[, list(id, tide_number, patch)]
   temp_ed <- temp_ed[rep(seq_len(nrow(temp_ed)),
                          purrr::map_int(edge_data$patchdata, nrow)), ]
   edge_data <- cbind(temp_ed, data.table::rbindlist(edge_data$patchdata,
@@ -118,13 +118,13 @@ wat_repair_ht_patches <- function(patch_data_list,
                    patch = newpatch,
                    newpatch = NULL)]
 
-  edge_data <- edge_data[, .(list(.SD)),
-                         by = .(id, tide_number, patch)]
+  edge_data <- edge_data[, list(list(.SD)),
+                         by = list(id, tide_number, patch)]
   data.table::setnames(edge_data, old = "V1", new = "patchdata")
 
   # get basic data summaries
   edge_data[, patchSummary := lapply(patchdata, function(dt) {
-    dt <- dt[, .(time, x, y,
+    dt <- dt[, list(time, x, y,
                  resTime, tidaltime, waterlevel)]
     dt <- data.table::setDF(dt)
     dt <- dplyr::summarise_all(.tbl = dt,
@@ -137,15 +137,15 @@ wat_repair_ht_patches <- function(patch_data_list,
   # advanced metrics on ungrouped data
   # distance in a patch in metres
   edge_data[, distInPatch := lapply(patchdata, function(df) {
-    sum(watlastools::wat_simple_dist(data = df), na.rm = TRUE)
+    sum(wat_simple_dist(data = df), na.rm = TRUE)
   })]
 
   # distance between patches
   tempdata <- edge_data[, unlist(patchSummary, recursive = FALSE),
-                        by = .(id, tide_number, patch)]
+                        by = list(id, tide_number, patch)]
 
   edge_data[, patchSummary := NULL]
-  edge_data[, distBwPatch := watlastools::wat_bw_patch_dist(data = tempdata,
+  edge_data[, distBwPatch := wat_bw_patch_dist(data = tempdata,
                                                 x1 = "x_end", x2 = "x_start",
                                                 y1 = "y_end", y2 = "y_start")]
   # displacement in a patch
@@ -197,7 +197,7 @@ wat_repair_ht_patches <- function(patch_data_list,
   data[, distBwPatch := wat_bw_patch_dist(data)]
 
   # fix patch numbers in tides
-  data[, patch := seq_len(.N), by = .(tide_number)]
+  data[, patch := seq_len(.N), by = list(tide_number)]
 
   # unlist all list columns
   data <- data[, lapply(.SD, unlist),
