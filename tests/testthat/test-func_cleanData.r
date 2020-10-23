@@ -35,12 +35,15 @@ testthat::test_that("cleaning raw data works", {
   # run function
   testoutput <- wat_clean_data(
     data = testdata,
-    moving_window = 3,
+    moving_window = 9,
     nbs_min = 3,
     sd_threshold = 5e5,
     filter_speed = TRUE,
     speed_cutoff = 150
   )
+
+  # first check they are not the same object
+  testthat::expect_error(testthat::expect_reference(testdata, testoutput))
 
   # merge test data and output
   testdata[, time := TIME / 1000L]
@@ -54,7 +57,7 @@ testthat::test_that("cleaning raw data works", {
   # test that cleaned x and y (median smoothed) are roughly similar to
   # X and Y, tolerance of 0.001 in this case
   testthat::expect_lte(max(check_coords$x - check_coords$X_raw),
-                       0.001)
+                       0.0001)
   testthat::expect_lte(max(check_coords$y - check_coords$Y_raw),
                        0.001)
 
