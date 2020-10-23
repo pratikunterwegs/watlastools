@@ -1,5 +1,6 @@
-#' A function to add high tide data to position data; also calculates the
-#' time of each position since high tide.
+#' Add high tide data to position data.
+#' 
+#' Also calculates the time of each position since high tide.
 #'
 #' @param data A data frame which is the output of the clean data function
 #' \code{wat_clean_data}.
