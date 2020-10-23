@@ -31,8 +31,8 @@ wat_remove_reflections <- function(data,
   data.table::setorderv(data, time)
 
   # get speed and angle
-  data[, `:=`(speed = watlastools::wat_get_speed(data),
-              angle = watlastools::wat_turning_angle(data))]
+  data[, `:=`(speed = wat_get_speed(data),
+              angle = wat_turning_angle(data))]
 
   # prepare a vector of rows to discard
   vec_discard <- integer()
