@@ -13,16 +13,18 @@ wat_get_speed <- function(data,
                           x = "x",
                           y = "y",
                           time = "time") {
-
   wat_check_data(data,
-                 names_expected = c(x, y, time))
+    names_expected = c(x, y, time)
+  )
 
   # set order in time
   data.table::setorderv(data, time)
 
   # get distance
-  distance <- wat_simple_dist(data,
-                                           x, y, time)
+  distance <- wat_simple_dist(
+    data,
+    x, y, time
+  )
 
   # get time
   time <- c(NA, diff(data[[time]]))
@@ -31,5 +33,4 @@ wat_get_speed <- function(data,
   speed <- distance / time
 
   return(speed)
-
 }
