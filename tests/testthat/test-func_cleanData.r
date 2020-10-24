@@ -48,7 +48,8 @@ testthat::test_that("cleaning raw data works", {
   # merge test data and output
   testdata[, time := TIME / 1000L]
   check_coords <- data.table::merge.data.table(testdata, testoutput,
-                                               by = "time")
+    by = "time"
+  )
 
   # test that X raw and Y raw are identical to pre-cleaning data
   testthat::expect_identical(check_coords$X_raw, check_coords$X)
@@ -56,10 +57,14 @@ testthat::test_that("cleaning raw data works", {
 
   # test that cleaned x and y (median smoothed) are roughly similar to
   # X and Y, tolerance of 0.001 in this case
-  testthat::expect_lte(max(check_coords$x - check_coords$X_raw),
-                       0.0001)
-  testthat::expect_lte(max(check_coords$y - check_coords$Y_raw),
-                       0.001)
+  testthat::expect_lte(
+    max(check_coords$x - check_coords$X_raw),
+    0.0001
+  )
+  testthat::expect_lte(
+    max(check_coords$y - check_coords$Y_raw),
+    0.001
+  )
 
   # test on real data
   real_data <- data.table::fread("../testdata/whole_season_tx_435.csv")

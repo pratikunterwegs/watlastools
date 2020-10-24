@@ -57,13 +57,18 @@ wat_repair_ht_patches <- function(patch_data_list,
 
       # bind all datatable into a single datatable
       # this needs to change
-      patch_data_list <- patch_data_list[unlist(purrr::map(
+      patch_data_list <- patch_data_list[vapply(
         patch_data_list,
         function(l) {
-          data.table::is.data.table(l) & nrow(l) > 0 &
+          all(
+            !is.null(l),
+            data.table::is.data.table(l),
+            nrow(l) > 0,
             all(names_required %in% colnames(l))
-        }
-      ))]
+          )
+        },
+        FUN.VALUE = TRUE
+      )]
       data <- data.table::rbindlist(patch_data_list, use.names = TRUE)
 
       # select first and last rows from each tide_number
@@ -170,9 +175,9 @@ wat_repair_ht_patches <- function(patch_data_list,
 
       # advanced metrics on ungrouped data
       # distance in a patch in metres
-      edge_data[, distInPatch := lapply(patchdata, function(df) {
+      edge_data[, distInPatch := vapply(patchdata, function(df) {
         sum(wat_simple_dist(data = df), na.rm = TRUE)
-      })]
+      }, FUN.VALUE = 1.0)]
 
       # distance between patches
       tempdata <- edge_data[, unlist(patchSummary, recursive = FALSE),
@@ -189,12 +194,12 @@ wat_repair_ht_patches <- function(patch_data_list,
       # apply func bw patch dist reversing usual end and begin
       tempdata[, dispInPatch := sqrt((x_end - x_start)^2 + (y_end - y_start)^2)]
       # type of patch
-      edge_data[, type := lapply(patchdata, function(df) {
+      edge_data[, type := vapply(patchdata, function(df) {
         a <- ifelse(sum(c("real", "inferred") %in% df$type) == 2,
           "mixed", data.table::first(df$type)
         )
         return(a)
-      })]
+      }, FUN.VALUE = "example_string")]
 
       # even more advanced metrics
       tempdata[, duration := (time_end - time_start)]
@@ -226,7 +231,9 @@ wat_repair_ht_patches <- function(patch_data_list,
           "patch"
         )
       )
-      edge_data[, nfixes := unlist(lapply(patchdata, nrow))]
+      edge_data[, nfixes := vapply(patchdata, nrow,
+        FUN.VALUE = 1L
+      )]
 
       # reattach edge cases to regular patch data and set order by start time
       data <- rbind(data, edge_data)
@@ -239,9 +246,9 @@ wat_repair_ht_patches <- function(patch_data_list,
       data[, patch := seq_len(.N), by = list(tide_number)]
 
       # unlist all list columns
-      data <- data[, lapply(.SD, unlist),
-        .SDcols = setdiff(colnames(data), "patchdata")
-      ]
+      # data <- data[, lapply(.SD, unlist),
+      #   .SDcols = setdiff(colnames(data), "patchdata")
+      # ]
 
       return(data)
     },

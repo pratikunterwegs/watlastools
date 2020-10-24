@@ -37,7 +37,8 @@ testthat::test_that("high tide repair works", {
   expnames <- c(
     "id", "tide_number", "type", "patch", "time_mean",
     "tidaltime_mean", "x_mean", "y_mean", "duration", "distInPatch",
-    "distBwPatch", "dispInPatch"
+    "distBwPatch", "dispInPatch",
+    "patchdata"
   )
 
   # check that the data columns are not list
@@ -51,12 +52,16 @@ testthat::test_that("high tide repair works", {
     ))
 
   # check that expected column names are present
-  purrr::walk(expnames, function(en) {
-    testthat::expect_true(en %in% colnames(repaired_data),
-      info = glue::glue("{expnames[i]} \\
-                                      expected in output but not produced")
-    )
-  })
+  watlastools:::wat_check_data(
+    repaired_data,
+    expnames
+  )
+
+  # check that accessing polygons works
+  testthat::expect_silent(wat_get_patch_summary(repaired_data,
+    which_data = "spatial"
+  ))
+
 
   # check that data are ordered in time
   testthat::expect_gt(min(as.numeric(diff(repaired_data$time_mean)),
