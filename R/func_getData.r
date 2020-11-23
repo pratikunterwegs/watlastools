@@ -14,7 +14,9 @@
 #' @param password Password to access the data.
 #' Contact \code{allert.bijleveld@nioz.nl} to get access.
 #' @param tag_prefix A numeric specifying the tag prefix.
-#' Defaults to \code{31001000}
+#' Defaults to \code{31001000000}.
+#' This is \emph{added} to the \code{tag} argument to get the WATLAS \code{TAG}
+#' that matches the resulting 11-digit number.
 #'
 #' @return A dataframe of agent positions, filtered between the
 #' required tracking times.
@@ -24,7 +26,7 @@
 wat_get_data <- function(tag,
                          tracking_time_start,
                          tracking_time_end,
-                         tag_prefix = "31001000",
+                         tag_prefix = 31001000000,
                          database = "some_database",
                          host = "abtdb1.nioz.nl",
                          username = "someuser",
@@ -40,9 +42,10 @@ wat_get_data <- function(tag,
   assertthat::assert_that(is.character(tracking_time_end),
     msg = "end tracking time is not a character"
   )
-  assertthat::assert_that(as.character(tag_prefix) == "31001000",
-    msg = "tag prefix is not 31001000"
-  )
+  # check digits in tag prefix are 11
+  assertthat::assert_that(nchar(tag_prefix) == 11,
+                          msg = glue::glue("tag prefix is not 11 digits, \\
+                                           rather {nchar(tag_prefix)} digits"))
 
   db_params <- c(host, username, password)
   purrr::walk(db_params, function(this_param) {
@@ -52,7 +55,8 @@ wat_get_data <- function(tag,
   })
 
   # process function arguments for sql database
-  tag <- glue::glue("{tag_prefix}{tag}")
+  # ADD TAG PREFIX TO TAG and convert to character
+  tag <- as.character(tag_prefix + tag)
   # convert to POSIXct format
   tracking_time_start <- as.POSIXct(tracking_time_start, tz = "CET")
   tracking_time_end <- as.POSIXct(tracking_time_end, tz = "CET")

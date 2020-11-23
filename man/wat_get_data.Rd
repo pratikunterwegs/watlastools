@@ -8,7 +8,7 @@ wat_get_data(
   tag,
   tracking_time_start,
   tracking_time_end,
-  tag_prefix = "31001000",
+  tag_prefix = 3.1001e+10,
   database = "some_database",
   host = "abtdb1.nioz.nl",
   username = "someuser",
@@ -26,7 +26,9 @@ should be retrieved.}
 corresponding to the above start point.}
 
 \item{tag_prefix}{A numeric specifying the tag prefix.
-Defaults to \code{31001000}}
+Defaults to \code{31001000000}.
+This is \emph{added} to the \code{tag} argument to get the WATLAS \code{TAG}
+that matches the resulting 11-digit number.}
 
 \item{database}{The database name on the host server. Defaults to
 \code{db} for unknown reasons.}
