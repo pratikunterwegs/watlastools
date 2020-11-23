@@ -1,6 +1,9 @@
 #' Get data from a remote ATLAS SQL database.
 #'
-#' @param tag A three digit numeric representing the ToA tag.
+#' @param tag An 11 digit number representing the ATLAS tag.
+#' May be passed as a character or a numeric.
+#' Will be converted to a character.
+#' An example is \code{"31001000001"}.
 #' @param tracking_time_start Character representation of time
 #' (Central European Time, +1 UTC) from which start point data
 #' should be retrieved.
@@ -12,12 +15,6 @@
 #' Defaults to \code{abtdb1.nioz.nl}.
 #' @param username Username to access the data.
 #' @param password Password to access the data.
-#' Contact \code{allert.bijleveld@nioz.nl} to get access.
-#' @param tag_prefix A numeric specifying the tag prefix.
-#' Defaults to \code{31001000000}.
-#' This is \emph{added} to the \code{tag} argument to get the WATLAS \code{TAG}
-#' that matches the resulting 11-digit number.
-#'
 #' @return A dataframe of agent positions, filtered between the
 #' required tracking times.
 #' @import RMySQL
@@ -26,15 +23,14 @@
 wat_get_data <- function(tag,
                          tracking_time_start,
                          tracking_time_end,
-                         tag_prefix = 31001000000,
                          database = "some_database",
                          host = "abtdb1.nioz.nl",
                          username = "someuser",
                          password = "somepassword") {
 
   # check data types
-  assertthat::assert_that(is.numeric(tag),
-    msg = "tag provided must be numeric"
+  assertthat::assert_that(any(is.numeric(tag), is.character(tag)),
+    msg = "tag provided must be numeric or character"
   )
   assertthat::assert_that(is.character(tracking_time_start),
     msg = "start tracking time is not a character"
@@ -43,9 +39,10 @@ wat_get_data <- function(tag,
     msg = "end tracking time is not a character"
   )
   # check digits in tag prefix are 11
-  assertthat::assert_that(nchar(tag_prefix) == 11,
-                          msg = glue::glue("tag prefix is not 11 digits, \\
-                                           rather {nchar(tag_prefix)} digits"))
+  assertthat::assert_that(nchar(as.character(tag)) == 11,
+    msg = glue::glue("tag is not 11 digits, \\
+                                           rather {nchar(tag)} digits")
+  )
 
   db_params <- c(host, username, password)
   purrr::walk(db_params, function(this_param) {
@@ -54,9 +51,6 @@ wat_get_data <- function(tag,
     )
   })
 
-  # process function arguments for sql database
-  # ADD TAG PREFIX TO TAG and convert to character
-  tag <- as.character(tag_prefix + tag)
   # convert to POSIXct format
   tracking_time_start <- as.POSIXct(tracking_time_start, tz = "CET")
   tracking_time_end <- as.POSIXct(tracking_time_end, tz = "CET")
