@@ -8,7 +8,6 @@ wat_get_data(
   tag,
   tracking_time_start,
   tracking_time_end,
-  tag_prefix = 3.1001e+10,
   database = "some_database",
   host = "abtdb1.nioz.nl",
   username = "someuser",
@@ -16,7 +15,10 @@ wat_get_data(
 )
 }
 \arguments{
-\item{tag}{A three digit numeric representing the ToA tag.}
+\item{tag}{An 11 digit number representing the ATLAS tag.
+May be passed as a character or a numeric.
+Will be converted to a character.
+An example is \code{"31001000001"}.}
 
 \item{tracking_time_start}{Character representation of time
 (Central European Time, +1 UTC) from which start point data
@@ -24,11 +26,6 @@ should be retrieved.}
 
 \item{tracking_time_end}{Character time representing the end point
 corresponding to the above start point.}
-
-\item{tag_prefix}{A numeric specifying the tag prefix.
-Defaults to \code{31001000000}.
-This is \emph{added} to the \code{tag} argument to get the WATLAS \code{TAG}
-that matches the resulting 11-digit number.}
 
 \item{database}{The database name on the host server. Defaults to
 \code{db} for unknown reasons.}
@@ -38,8 +35,7 @@ Defaults to \code{abtdb1.nioz.nl}.}
 
 \item{username}{Username to access the data.}
 
-\item{password}{Password to access the data.
-Contact \code{allert.bijleveld@nioz.nl} to get access.}
+\item{password}{Password to access the data.}
 }
 \value{
 A dataframe of agent positions, filtered between the
