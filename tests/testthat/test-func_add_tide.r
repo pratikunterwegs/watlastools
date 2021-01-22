@@ -2,7 +2,7 @@ context("add tide data\n")
 testthat::test_that("adding tide data works", {
 
   # read in data subset
-  testdata <- data.table::fread("../testdata/whole_season_tx_435.csv")[1:1000, ]
+  testdata <- data.table::fread("tests/testdata/whole_season_tx_435.csv")[1:1000, ]
 
   # process with rm attractor, clean data, and add tide
   testoutput <- wat_clean_data(
@@ -14,7 +14,7 @@ testthat::test_that("adding tide data works", {
 
   testoutput <- wat_add_tide(
     data = testoutput,
-    tide_data = "../testdata/tidesSummer2018.csv"
+    tide_data = "tests/testdata/tidesSummer2018.csv"
   )
 
   # do tests
@@ -22,6 +22,11 @@ testthat::test_that("adding tide data works", {
   testthat::expect_s3_class(
     object = testoutput,
     class = c("data.table", "data.frame")
+  )
+
+  # test for non zero rows
+  testthat::expect_true(
+    nrow(testoutput) > 0
   )
 
   # check that data are ordered in time
