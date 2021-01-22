@@ -1,4 +1,4 @@
-^atlastools\.Rproj$
+^watlastools\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^appveyor\.yml$
@@ -9,3 +9,4 @@
 ^doc$
 ^Meta$
 ^codemeta\.json$
+^\.github$
