@@ -24,6 +24,11 @@ testthat::test_that("adding tide data works", {
     class = c("data.table", "data.frame")
   )
 
+  # test for non zero rows
+  testthat::expect_true(
+    nrow(testoutput) > 0
+  )
+
   # check that data are ordered in time
   testthat::expect_gt(min(as.numeric(diff(testoutput$time)), na.rm = TRUE), 0)
 
